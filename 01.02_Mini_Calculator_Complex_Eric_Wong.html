@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head></head>
+	<body>
+		<!-- 
+			Type a Title below using a h1 tag. 
+			e.g. 01.01 Average (simple) Joe Bloggs	
+		-->
+		
+		<h1>01.02 Mini Calculator (Complex) Eric Wong</h1>
+		
+		<!-- Type short instructions below using a p tag. -->
+		
+		<p>Please enter two numbers and pick a operation type</p>
+		
+		<!--
+			Enter short labels using p tags and input boxes below
+			(also use br tags to create new lines if necessary).
+		-->
+		
+		<input type = "number" id = "inpNum1">
+		<select id="selectOp">
+			<option value="opAdd">+</option>
+			<option value="opSub">-</option>
+			<option value="opMulti">×</option>
+			<option value="opDiv">÷</option>
+			<option value="opMod">%</option>
+		</select>
+		<input type = "number" id = "inpNum2">
+		<span id="tagAns">&nbsp;&nbsp;=&nbsp;&nbsp;Please enter both numbers</span>
+		
+		<script>
+			
+			document.oninput = function() {
+				let num1 = document.getElementById("inpNum1").valueAsNumber
+				let num2 = document.getElementById("inpNum2").valueAsNumber
+
+				if (isNaN(num1) || isNaN(num2)) {
+					document.getElementById("tagAns").innerHTML = "&nbsp;&nbsp;=&nbsp;&nbsp;Please enter both numbers"
+					return;
+				}
+				
+				let selectOp = document.getElementById("selectOp").value
+				if (selectOp == "opAdd") {
+					document.getElementById("tagAns").innerHTML = `&nbsp;&nbsp;=&nbsp;&nbsp;${num1 + num2}`
+				} else if (selectOp == "opSub") {
+					document.getElementById("tagAns").innerHTML = `&nbsp;&nbsp;=&nbsp;&nbsp;${num1 - num2}`
+				} else if (selectOp == "opMulti") {
+					document.getElementById("tagAns").innerHTML = `&nbsp;&nbsp;=&nbsp;&nbsp;${num1 * num2}`
+				} else if (selectOp == "opDiv") {
+					if (num2 == 0) {
+						document.getElementById("tagAns").innerHTML = `&nbsp;&nbsp;=&nbsp;&nbsp;Number 2 cannot be zero!`
+						return
+					}
+					document.getElementById("tagAns").innerHTML = `&nbsp;&nbsp;=&nbsp;&nbsp;${num1 / num2}`
+				} else if (selectOp == "opMod") {
+					if (num2 == 0) {
+						document.getElementById("tagAns").innerHTML = `&nbsp;&nbsp;=&nbsp;&nbsp;Number 2 cannot be zero!`
+						return
+					}
+					document.getElementById("tagAns").innerHTML = `&nbsp;&nbsp;=&nbsp;&nbsp;${num1 % num2}`
+				}
+			}
+			
+		</script>
+	</body>
+</html>
+
+<!--
+* Use the following format for web page names:
+  UnitNum.TaskNum_TaskName_FirstName_Surname and use _ for spaces e.g. 01.01_Average_Joe_Bloggs
+  Note the use of a capital to begin the TaskName.
+* To change and access the contents of tags use .innerHTML but use .value for form elements.
+  e.g. input, buttons, etc...
+* No need for a form actually but you must give inputs an id.
+* Must use input type = "number" when inputting numbers and access their contents using valueAsNumber.
+* Use valueAsNumber to access the contents of form elements as numbers rather than text.
+* Code clarity and "tidy" design: 
+	* Pages should always begin with a h1 tag with UnitNum.TaskNum TaskName FirstName LastName.
+	* Spaces before and after = and arithmetic operators (e.g. +, / etc...).
+	* Indentation:
+		* Tags within tags and function code lines.
+		* Tag content if tags cannot start and end on the same line.
+	* Tags should start and end on the same line if possible (without scrolling horizontally).
+	* Use blank lines to separate code parts (e.g. instructions, input, output).
+	* ids, function names & variable names must be short, meaningful and follow the camelCase format.
+	* ids must begin with 3 lower case letters to indicate the element type 
+	  e.g. "tag" for HTML tags, "inp" for input, etc...
+	* However, types and keywords must be "as shown".
+	* No unnecessary code and code is elegant (not unnecessarily complicated).
+	* Use variables to help make calculations easily readable and understandable.
+	* To declare variables I encourage the use of let rather than var as it is more in line with
+	  how variables behave in other languages. 
+-->
