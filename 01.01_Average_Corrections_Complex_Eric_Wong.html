@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+	<head></head>
+	<body>
+		<!-- Type a Title below using a h1 tag. -->
+		
+		<h1>01.01 Average Corrections Complex Eric Wong</h1> <!--<h1>Average Calculator</h1> Correction reason: Wrong title name-->
+		
+		<!-- Type short instructions below using a p tag. -->
+		
+		<p>Please enter numbers to calculate the average of them.</p>
+		
+		<!--
+			Enter short labels using p tags and input boxes below
+			(also use br tags to create new lines if necessary).
+		-->
+		
+		<p>Enter Number:</p>
+		<input type = "number" id = "inpNum">
+		
+		<!-- Enter buttons which call functions below. -->
+		
+		<input type = "button" onclick = "addNum()" value = "Add Number">
+		<input type = "button" onclick = "rstNum()" value = "Reset">
+		
+		<!-- Enter h3/h2 tags for the result/s below. -->
+		
+		<h3>Average:</h3>
+		<h2 id="tagAvg">Please enter a number first.</h2><!--<h2 id="tagAvg">ENTER A NUMBER FIRST</h2> Correction Reason: All caps is literally yelling at the users, which is very impolite.-->
+		
+		<h3 id="tagNums">Numbers: (0 Entered)</h3><!--<h3 id="tagNums">Numbers:</h3> Change reason: This app is required to display the amount of numbers-->
+		<ul id="liNum"></ul>
+		
+		<script>
+
+			/* Old code: let nums = [] - Removed because calculating average is just {sum of all numbers} / {amount of numbers}.
+										Using a for loop to iterate through an array and using array.length is still a way, but
+										by {sum of all numbers} / {amount of numbers} is much more efficient because the computer
+										only needs to calculate once instead of iterating through an array. */
+
+			
+			let sum = 0;
+			let numCount = 0;
+
+			function update() {
+				let avg = document.getElementById("tagAvg")
+				avg.innerHTML = sum / numCount
+			}
+
+			/* function getAvg(li) {
+				n = 0
+				for (i = 0; i < li.length; i++) {
+					n += li[i]
+				}
+				return n / li.length;
+			} */
+			// This function is removed because from now on this is using {sum variaable} / {amount of numbers variable},
+			// not iterating through an array (as said above).
+			
+			function addNum() {
+				
+				let inpNum = document.getElementById("inpNum");
+
+				num = inpNum.valueAsNumber
+				console.log(num == NaN)
+				if (isNaN(num)) {
+					alert("Please enter a valid number.")
+					return
+				}
+
+				numCount++;
+				sum += num;
+				document.getElementById("tagNums").innerHTML = `Numbers: (${numCount} Entered)` // New code: Used to display amount of numbers
+
+				update()
+				inpNum.value = null;
+
+				let newNum = document.createElement("li")
+				newNum.innerText = num
+				document.getElementById("liNum").appendChild(newNum)
+			
+			}
+
+			function rstNum() {
+				sum = 0
+				numCount = 0
+
+				document.getElementById("tagAvg").innerHTML = "Please enter a number first."
+				document.getElementById("liNum").replaceChildren();
+				document.getElementById("tagNums").innerHTML = `Numbers: (${numCount} Entered)` // New code: update amount of numbers
+			}
+			
+		</script>
+	</body>
+</html>
+
+<!--
+* Use the following format for web page names:
+  UnitNum.TaskNum_TaskName and use _ for spaces e.g. 01.01_Average
+  Note the use of a capital to begin the TaskName.
+* To change and access the contents of tags use .innerHTML but use .value for form elements.
+  e.g. input, buttons, etc...
+* No need for a form actually but you must give inputs an id.
+* Must use input type = "number" when inputting numbers and access their contents using valueAsNumber.
+* Use valueAsNumber to access the contents of form elements as numbers rather than text.
+* One mark always available for code clarity and "tidy" design: 
+	* Pages should always begin with a h1 tag with UnitNum.TaskNum TaskName.
+	* Spaces before and after = and arithmetic operators (e.g. +, / etc...).
+	* Indentation:
+		* Tags within tags and function code lines.
+		* Tag content if tags cannot start and end on the same line.
+	* Tags should start and end on the same line if possible (without scrolling horizontally).
+	* Use blank lines to separate code parts (e.g. instructions, input, output).
+	* ids, function names & variable names must be short, meaningful and follow the camelCase format.
+	* ids must begin with 3 lower case letters to indicate the element type 
+	  e.g. "tag" for HTML tags, "inp" for input, etc...
+	* However, types and keywords must be "as shown".
+	* Use variables to help make calculations easily readable and understandable.
+	* To declare variables I encourage the use of let rather than var as it is more in line with
+	  how variables behave in other languages. 
+-->
