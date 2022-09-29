@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head></head>
+	<body>
+		<!-- 
+			Type a Title below using a h1 tag. 
+			e.g. 01.01 Average (simple) Joe Bloggs	
+		-->
+		
+		<h1>02.05 Hotel Eric Wong</h1>
+		
+		<!-- Type short instructions below using a p tag. -->
+
+		<!--
+			Enter short labels using p tags and input boxes below
+			(also use br tags to create new lines if necessary).
+		-->
+		
+		<p>Please enter the cost per night ($):</p>
+		<input type = "number" id = "inpMoney" min = "0">
+		
+		<p>Please enter the distance from the party (km):</p>
+		<input type = "number" id = "inpDist" min = "0">
+		
+		<!-- Enter buttons which call functions below. -->
+		<br><br>
+		
+		<input type = "button" onclick = "calc()" value = "Check">
+		
+		<!-- Enter h3/h2 tags for the result/s below. -->
+		
+		<h2 id = "tagAns"></h2>
+		<h2 id = "tagErrCost"></h2>
+		<h2 id = "tagErrDist"></h2>
+		
+		<script>
+			
+			/* 
+				Type JavaScript code and functions below.
+				I prefer a function name to start with calc if
+				calculates something.
+			*/
+			
+			function calc() {
+				
+				let money = document.getElementById("inpMoney").valueAsNumber;
+				let dist = document.getElementById("inpDist").valueAsNumber;
+
+				let res = document.getElementById("tagAns");
+				let tagMoney = document.getElementById("tagErrCost");
+				let tagDist = document.getElementById("tagErrDist");
+
+				tagMoney.innerHTML = ""
+				tagDist.innerHTML = ""
+				res.innerHTML = ""
+
+				if (isNaN(money) || isNaN(dist)) {
+					alert("One or more of the inputs are missing. You need to enter all of them.")
+				} else if (money < 0 || dist < 0)
+					res.innerHTML = "The cost and the distance must be >= 0!" 
+				else if (money <= 50 && dist <= 5)
+					res.innerHTML = "Order the hotel!"
+				else
+					res.innerHTML = "Don't order the hotel!"
+				
+				if (money > 50)
+					tagMoney.innerHTML = "Cost must be <= 50!"
+				if (dist > 5)
+					tagDist.innerHTML = "Distance must be <= 5!"
+			}
+			
+		</script>
+	</body>
+</html>
+
+<!--
+* Use the following format for web page names:
+  UnitNum.TaskNum_TaskName_FirstName_Surname and use _ for spaces e.g. 01.01_Average_Joe_Bloggs
+  Note the use of a capital to begin the TaskName.
+* To change and access the contents of tags use .innerHTML but use .value for form elements.
+  e.g. input, buttons, etc...
+* No need for a form actually but you must give inputs an id.
+* Must use input type = "number" when inputting numbers and access their contents using valueAsNumber.
+* Use valueAsNumber to access the contents of form elements as numbers rather than text.
+* Code clarity and "tidy" design: 
+	* Pages should always begin with a h1 tag with UnitNum.TaskNum TaskName FirstName LastName.
+	* Spaces before and after = and arithmetic operators (e.g. +, / etc...).
+	* Indentation:
+		* Tags within tags and function code lines.
+		* Tag content if tags cannot start and end on the same line.
+	* Tags should start and end on the same line if possible (without scrolling horizontally).
+	* Use blank lines to separate code parts (e.g. instructions, input, output).
+	* ids, function names & variable names must be short, meaningful and follow the camelCase format.
+	* ids must begin with 3 lower case letters to indicate the element type 
+	  e.g. "tag" for HTML tags, "inp" for input, etc...
+	* However, types and keywords must be "as shown".
+	* No unnecessary code and code is elegant (not unnecessarily complicated).
+	* Use variables to help make calculations easily readable and understandable.
+	* To declare variables I encourage the use of let rather than var as it is more in line with
+	  how variables behave in other languages. 
+-->
