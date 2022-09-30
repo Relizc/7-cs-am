@@ -38,14 +38,10 @@
 			<option value="Vincent">Vincent</option>
 		</select>
 
-		<p>Enter the total amount of classworks:</p>
-		<input type = "number" min="0" id = "inpChats">
+		<p>Enter the total amount of times chatted:</p>
+		<input type = "number" min="0" id = "inpChats" disabled>
 		
 		<!-- Enter buttons which call functions below. -->
-
-		<br><br>
-		
-		<input type = "button" onclick = "calcDeduct()" value = "Subtract Points">
 		
 		<!-- Enter h3/h2 tags for the result/s below. -->
 		
@@ -68,13 +64,13 @@
 			// Run when loaded
 			let fails = {"David": 0, "Eric": 0, "Vincent": 0}
 			let students = Object.keys(fails)
-			var maxScore = 0
-
-			let workAmount = document.getElementById("workAmount")
+			
+			var inpChats = document.getElementById("inpChats")
+			var inpWorks = document.getElementById("inpWorks")
+			var opStudents = document.getElementById("opStudents")
+			var workAmount = document.getElementById("workAmount")
 
 			function refreshScore() {
-
-				let students = Object.keys(fails)
 
 				let inpWorks = document.getElementById("inpWorks").valueAsNumber;
 				if (isNaN(inpWorks)) {
@@ -82,41 +78,31 @@
 					for (i = 0; i < students.length; i ++) {
 						document.getElementById("score" + students[i]).innerHTML = `${students[i]}: Enter the amount of classworks`
 					}
+					inpChats.disabled = true;
 				}
 				else if (inpWorks < 0)
 					workAmount.innerHTML = "The work amount must be >= 0"
 				else {
-					maxScore = 100 * inpWorks
-					workAmount.innerHTML = `There are currently ${inpWorks} classwork(s), resulting in a total of ${maxScore} points.`
+					workAmount.innerHTML = `There are currently ${inpWorks} classwork(s), resulting in a total of ${100 * inpWorks} points.`
 					for (i = 0; i < students.length; i ++) {
+						let maxScore = 100 * (inpWorks - fails[students[i]])
 						document.getElementById("score" + students[i]).innerHTML = `${students[i]}: (Grade Losses: ${fails[students[i]]}, ${maxScore} ÷ ${inpWorks}) ${maxScore / inpWorks}`
 					}
-				}
-
-
-				
-
-
-
-				if (isNaN(inpWorks)) {
-					for (i = 0; i < students.length; i ++) {
-						document.getElementById(students[i] + "Score").innerHTML = "Error: Enter the amount of classworks"
-					}
-				} else {
-					for (i = 0; i < students.length; i ++) {
-						document.getElementById(students[i] + "Score").innerHTML = ""
-					}
+					inpChats.disabled = false;
 				}
 			}
 
-			document.getElementById("inpWorks").oninput = refreshScore
-			
-			function calcDeduct() {
-				
-				let d = document.getElementById("inp?").valueAsNumber;
-				
-				document.getElementById("tag?").innerHTML =  "";
+			function refreshZero() {
+				let zero = inpChats.valueAsNumber;
+				if (isNaN(zero) || zero < 0) {
+					zero = 0
+				}
+				fails[opStudents.value] = zero;
+				refreshScore()
 			}
+
+			inpWorks.oninput = refreshScore
+			inpChats.oninput = refreshZero
 			
 		</script>
 	</body>
