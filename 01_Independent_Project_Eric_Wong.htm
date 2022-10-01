@@ -21,6 +21,10 @@
 				<li></li>
 			</ol>
 		</ul>
+
+		<p>Add a student:</p>
+		<input type = "text" min="0" id = "inpStu">
+		<input type = "button" value = "Add Student" onclick = "addStudent()">
 		
 		<!--
 			Enter short labels using p tags and input boxes below
@@ -31,7 +35,7 @@
 		<input type = "number" min="0" id = "inpWorks">
 
 		
-		<p>Select a student:</p>
+		<p>Select a student (There are currently no students yet):</p>
 		<select name = "students" id = "opStudents">
 			<option value="David">David</option>
 			<option value="Eric">Eric</option>
@@ -39,7 +43,7 @@
 		</select>
 
 		<p>Enter the total amount of times chatted:</p>
-		<input type = "number" min="0" id = "inpChats" disabled>
+		<input type = "number" min = "0" id = "inpChats" disabled>
 		
 		<!-- Enter buttons which call functions below. -->
 		
@@ -69,10 +73,18 @@
 			var inpWorks = document.getElementById("inpWorks")
 			var opStudents = document.getElementById("opStudents")
 			var workAmount = document.getElementById("workAmount")
+			var inpStu = document.getElementById("inpStu")
+
+			function addStudent() {
+				fails[inpStu.value] = 0
+				refreshScore()
+			}
 
 			function refreshScore() {
 
 				let inpWorks = document.getElementById("inpWorks").valueAsNumber;
+				inpChats.max = inpWorks;
+				
 				if (isNaN(inpWorks)) {
 					workAmount.innerHTML = "There are currently no classworks. Enter the amount of classworks to begin."
 					for (i = 0; i < students.length; i ++) {
@@ -85,8 +97,12 @@
 				else {
 					workAmount.innerHTML = `There are currently ${inpWorks} classwork(s), resulting in a total of ${100 * inpWorks} points.`
 					for (i = 0; i < students.length; i ++) {
-						let maxScore = 100 * (inpWorks - fails[students[i]])
-						document.getElementById("score" + students[i]).innerHTML = `${students[i]}: (Grade Losses: ${fails[students[i]]}, ${maxScore} ÷ ${inpWorks}) ${maxScore / inpWorks}`
+						if (!(fails[students[i]] <= inpWorks)) {
+							document.getElementById("score" + students[i]).innerHTML = students[i] + ": Chatted times must be less than the total amount of classwork"
+						} else {
+							let maxScore = 100 * (inpWorks - fails[students[i]])
+							document.getElementById("score" + students[i]).innerHTML = `${students[i]}: (Grade Losses: ${fails[students[i]]}, ${maxScore} ÷ ${inpWorks}) ${maxScore / inpWorks}`
+						}
 					}
 					inpChats.disabled = false;
 				}
@@ -101,8 +117,14 @@
 				refreshScore()
 			}
 
+			function refreshSelect() {
+				let option = opStudents.value
+				inpChats.value = fails[option]
+			}
+
 			inpWorks.oninput = refreshScore
 			inpChats.oninput = refreshZero
+			opStudents.onchange = refreshSelect
 			
 		</script>
 	</body>
