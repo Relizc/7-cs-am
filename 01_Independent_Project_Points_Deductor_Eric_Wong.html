@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+	<head></head>
+	<body>
+		<!-- 
+			Type a Title below using a h1 tag. 
+			e.g. 01.01 Average (simple) Joe Bloggs	
+		-->
+		
+		<h1>01 Independent Project Points Deductor Eric Wong</h1>
+		
+		<!-- Type short instructions below using a p tag. -->
+		
+		<p>Purpose & Start Instructions</p>
+		<ul>
+			<li>There are in total of 13 students in the AM CS Elective. People like me love chatting on teams</li>
+			<li>Howeve, Mr. Lee hated students chatting in teams.</li>
+			<li>This tool remove student's classwork grade and will recalculate their average score for each score remove.</li>
+			<li>To Calculate:</li>
+			<ol style = "list-style-type: upper-roman">
+				<li>In default, there are only 2 students: Eric and Vincent (If you want to get rid of them click "Remove Students")</li>
+				<li>To add more people to your class, use the first area - Add Student</li>
+				<ol style = "list-style-type: upper-roman">
+					<li>Type the student's name in the input box. The input cannot be empty or with spaces.</li>
+					<li>Click the "Add Student" button to add a student.</li>
+					<li>The student will now appear at the bottom of the report.</li>
+				</ol>
+				<li>After adding enough students, please select a student you want to operate on.</li>
+				<li>Next please enter the total amount of classwork that is going to be issued to the student you picked.</li>
+				<li>If you find someone chatting, simply select the student from the drop table.</li>
+				<li>Type how many times the student chatted in this Grading Quadrant, and that will be the amount of zeros given.</li>
+			</ol>
+			<li>To Remove All Students:</li>
+			<ol style="list-style-type: upper-roman">
+				<li>Just simply click the "Remove ALL Students" button on the right of the "Add Student" button.</li>
+				<li style = "font-weight: bold;">WARNING! This will remove all students.</li>
+			</ol>
+			<li>To Remove One Students:</li>
+			<ol style="list-style-type: upper-roman">
+				<li>Click the "Remove (Student Name)" button below the drop down list.</li>
+			</ol>
+		</ul>
+
+		<p>Add a student:</p>
+		<input type = "text" min="0" id = "inpStu"><br><br>
+		<input type = "button" value = "Add Student" onclick = "addStudent()">
+		<input type = "button" value = "Remove ALL Students" onclick = "removeAll()">
+		
+		<!--
+			Enter short labels using p tags and input boxes below
+			(also use br tags to create new lines if necessary).
+		-->
+
+		
+		<p id = "tagStuAmt">Select a student (There are currently 2 students):</p>
+		<select name = "students" id = "optStu">
+			<option value="Eric" id = "inOpEric" style = "font-weight: bold;">Eric</option>
+			<option value="Vincent" id = "inOpVincent">Vincent</option>
+		</select>
+
+		<p>Enter the total amount of classworks:</p>
+		<input type = "number" min="0" id = "inpWorks" value = "0">
+
+		<p>Enter the total amount of times chatted:</p>
+		<input type = "number" min = "0" id = "inpChats" value = "0">
+
+		<p>Remove the current student you selected:</p>
+		<input type = "button" value = "Remove This Student" onclick = "removeThis()" id = "btnRmThis">
+		
+		<!-- Enter buttons which call functions below. -->
+		
+		<!-- Enter h3/h2 tags for the result/s below. -->
+		
+		<h3>The students' current average grade:</h3>
+		<p id = "tagAnalyze">Analytics will display here when at least there is one valid input for one student.</p>
+		<ul id = "ulScore">
+			<li id = "scoreEric" style = "font-weight: bold;">Eric: Begin by selecting this student and then type in the inputs</li>
+			<li id = "scoreVincent">Vincent: Begin by selecting this student and then type in the inputs</li>
+		</ul>
+		
+		<script>
+			
+			/* 
+				Type JavaScript code and functions below.
+				I prefer a function name to start with calc if
+				calculates something.
+			*/
+
+			// Run when loaded
+
+			var stuData = {"Eric": {"chat": 0, "work": 0}, "Vincent": {"chat": 0, "work": 0}}
+
+			var optStu = document.getElementById("optStu")
+			var inpWorks = document.getElementById("inpWorks")
+			var inpChats = document.getElementById("inpChats")
+			var inpStu = document.getElementById("inpStu")
+			var tagAnalyze = document.getElementById("tagAnalyze")
+			var tagStuAmt = document.getElementById("tagStuAmt")
+			var ulScore = document.getElementById("ulScore")
+			var btnRmThis = document.getElementById("btnRmThis")
+
+			optStu.onchange = function () {
+				inpWorks.value = stuData[optStu.value].work
+				inpChats.value = stuData[optStu.value].chat
+
+				
+				let nodes = ulScore.childNodes;
+				for (i = 0; i < nodes.length; i ++) {
+					if (nodes[i].id == "score" + optStu.value) {
+						nodes[i].style = "font-weight: bold;"
+					} else {
+						nodes[i].style = null
+					}
+				}
+
+				btnRmThis.value = "Remove " + optStu.value;
+			}
+
+			function getLetterGrade(score) {
+				if (score > 92) {
+					return "A"
+				} else if (score > 90) {
+					return "A-"
+				} else if (score > 86) {
+					return "B+"
+				} else if (score > 82) {
+					return "B"
+				} else if (score > 80) {
+					return "B-"
+				} else if (score > 76) {
+					return "C+"
+				} else if (score > 72) {
+					return "C"
+				} else if (score > 70) {
+					return "C-"
+				} else if (score > 66) {
+					return "D+"
+				} else if (score > 62) {
+					return "D"
+				} else if (score >= 60) {
+					return "D-"
+				} else {
+					return "F"
+				}
+			}
+
+			function removeThis() {
+				let name = optStu.value;
+				document.getElementById("score" + name).remove()
+				document.getElementById("inOp" + name).remove()
+				delete stuData[name]
+				if (Object.keys(stuData).length == 0) {
+					inpWorks.disabled = true;
+					inpWorks.innerHTML = "";
+					inpChats.disabled = true;
+					inpChats.innerHTML = "";
+					btnRmThis.disabled = true;
+					btnRmThis.value = "Remove Nobody"
+					tagAnalyze.innerHTML = "Analytics will display here when at least there is one valid input for one student."
+					inpWorks.value = null
+					inpChats.value = null
+					tagStuAmt.innerHTML = `Select a student (There are currently no students yet)`
+				} else {
+					btnRmThis.value = "Remove " + optStu.value;
+					inpWorks.value = stuData[optStu.value].work
+					inpChats.value = stuData[optStu.value].chat
+					tagStuAmt.innerHTML = `Select a student (There are currently ${Object.keys(stuData).length} students)`
+				}
+			}
+
+			function addStudent() {
+				let name = inpStu.value
+
+				if (Object.keys(stuData).includes(name)) {
+					alert(`The student with name "${name}" already exsists. Please pick a new name.`)
+				} else if (name.replace(" ", "") == "") {
+					alert("Invalid name! You must enter something!")
+				} else {
+					let e1 = document.createElement("option")
+					e1.value = name;
+					e1.innerHTML = name;
+					e1.id = "inOp" + name;
+					optStu.appendChild(e1)
+
+					let e = document.createElement("li")
+					e.innerHTML = `${name}: Begin by selecting this student and then type in the inputs`
+					e.id = "score" + name
+					ulScore.appendChild(e)
+
+					stuData[name] = {"chat": 0, "work": 0}
+
+					inpStu.value = ""
+
+					inpWorks.disabled = null;
+					inpChats.disabled = null;
+					btnRmThis.disabled = null;
+					btnRmThis.value = "Remove " + optStu.value;
+
+					tagStuAmt.innerHTML = `Select a student (There are currently ${Object.keys(stuData).length} students)`
+				}
+
+				
+			}
+
+			function removeAll() {
+				ulScore.replaceChildren()
+				optStu.replaceChildren()
+				inpWorks.disabled = true;
+				inpWorks.innerHTML = "";
+				inpChats.disabled = true;
+				inpChats.innerHTML = "";
+				btnRmThis.disabled = true;
+				btnRmThis.value = "Remove Nobody"
+				tagAnalyze.innerHTML = "Analytics will display here when at least there is one valid input for one student."
+				tagStuAmt.innerHTML = `Select a student (There are currently no students yet)`
+				stuData = {}
+			}
+
+			function refreshScore() {
+				let workVal = inpWorks.valueAsNumber
+				let chatVal = inpChats.valueAsNumber
+				let stuName = optStu.value
+				let changeElement = document.getElementById("score" + stuName)
+
+				stuData[stuName].work = workVal
+				stuData[stuName].chat = chatVal
+				inpChats.max = workVal
+
+				tagAnalyze.innerHTML = "Analytics will display here when at least there is one valid input for one student."
+
+				if (chatVal < 0 || workVal < 0) {
+					changeElement.innerHTML = `${stuName}: (Error) Both of the inputs must be >= 0.`
+				} else if (chatVal == 0 && workVal == 0) {
+					changeElement.innerHTML = `${stuName}: (Error) Both of the inputs cannot be 0.`
+				} else if (isNaN(workVal) && isNaN(chatVal)) {
+					changeElement.innerHTML = `${stuName}: (Error) Enter the amount of classwork issued to this student and the amount of times chatted in class.`
+				} else if (isNaN(workVal)) {
+					changeElement.innerHTML = `${stuName}: (Error) Enter the amount of classwork issued to this student.`
+				} else if (isNaN(chatVal)) {
+					changeElement.innerHTML = `${stuName}: (Error) Enter the amount of times chatted in the class.`
+				} else if (!(chatVal <= workVal)) {
+					changeElement.innerHTML = `${stuName}: (Error) Chatted times must be less than the total amount of classwork.`
+				} else {
+					let thisGrade = (workVal - chatVal) * 100 / workVal;
+					changeElement.innerHTML = `${stuName}: Total classwork amount: ${workVal}, Total chatting times: ${chatVal}, (${workVal * 100} - ${chatVal * 100}) ÷ ${workVal} = ${thisGrade}% (${getLetterGrade(thisGrade)})`
+					
+					let maxGrade = 0;
+					let minGrade = 100;
+					let sumGrade = 0;
+					let amtGrade = 0;
+					let key = Object.keys(stuData)
+					let flag = true;
+
+					for (i = 0; i < key.length; i++) {
+						flag = true;
+						let grade = (stuData[key[i]].work - stuData[key[i]].chat) * 100 / stuData[key[i]].work;
+						if (isNaN(grade)) {
+							flag = false;
+							grade = 0;
+							maxGrade = Math.max(maxGrade, 0)
+							minGrade = Math.min(minGrade, 100)
+						} else {
+							maxGrade = Math.max(maxGrade, grade)
+							minGrade = Math.min(minGrade, grade)
+						}
+						sumGrade += grade;
+						if (flag)
+							amtGrade ++
+					}
+					tagAnalyze.innerHTML = `Max: ${maxGrade}%, Min: ${minGrade}%, Mean: ${sumGrade / amtGrade}%, Range: ${maxGrade - minGrade}%, Amount: ${amtGrade}`
+				}
+			}
+
+			inpWorks.oninput = refreshScore
+			inpChats.oninput = refreshScore
+			
+			
+		</script>
+	</body>
+</html>
+
+<!--
+* Use the following format for web page names:
+  UnitNum.TaskNum_TaskName_FirstName_Surname and use _ for spaces e.g. 01.01_Average_Joe_Bloggs
+  Note the use of a capital to begin the TaskName.
+* To change and access the contents of tags use .innerHTML but use .value for form elements.
+  e.g. input, buttons, etc...
+* No need for a form actually but you must give inputs an id.
+* Must use input type = "number" when inputting numbers and access their contents using valueAsNumber.
+* Use valueAsNumber to access the contents of form elements as numbers rather than text.
+* Code clarity and "tidy" design: 
+	* Pages should always begin with a h1 tag with UnitNum.TaskNum TaskName FirstName LastName.
+	* Spaces before and after = and arithmetic operators (e.g. +, / etc...).
+	* Indentation:
+		* Tags within tags and function code lines.
+		* Tag content if tags cannot start and end on the same line.
+	* Tags should start and end on the same line if possible (without scrolling horizontally).
+	* Use blank lines to separate code parts (e.g. instructions, input, output).
+	* ids, function names & variable names must be short, meaningful and follow the camelCase format.
+	* ids must begin with 3 lower case letters to indicate the element type 
+	  e.g. "tag" for HTML tags, "inp" for input, etc...
+	* However, types and keywords must be "as shown".
+	* No unnecessary code and code is elegant (not unnecessarily complicated).
+	* Use variables to help make calculations easily readable and understandable.
+	* To declare variables I encourage the use of let rather than var as it is more in line with
+	  how variables behave in other languages. 
+-->
