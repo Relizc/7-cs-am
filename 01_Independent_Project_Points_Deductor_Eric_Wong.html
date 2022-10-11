@@ -17,28 +17,28 @@
 			<li>Howeve, Mr. Lee hated students chatting in teams.</li>
 			<li>This tool remove student's classwork grade and will recalculate their average score for each score remove.</li>
 			<li>To Calculate:</li>
-			<ol style = "list-style-type: upper-roman">
+			<ul>
 				<li>In default, there are only 2 students: Eric and Vincent (If you want to get rid of them click "Remove Students")</li>
 				<li>To add more people to your class, use the first area - Add Student</li>
-				<ol style = "list-style-type: upper-roman">
+				<ul>
 					<li>Type the student's name in the input box. The input cannot be empty or with spaces.</li>
 					<li>Click the "Add Student" button to add a student.</li>
 					<li>The student will now appear at the bottom of the report.</li>
-				</ol>
+				</ul>
 				<li>After adding enough students, please select a student you want to operate on.</li>
 				<li>Next please enter the total amount of classwork that is going to be issued to the student you picked.</li>
 				<li>If you find someone chatting, simply select the student from the drop table.</li>
 				<li>Type how many times the student chatted in this Grading Quadrant, and that will be the amount of zeros given.</li>
-			</ol>
+			</ul>
 			<li>To Remove All Students:</li>
-			<ol style="list-style-type: upper-roman">
+			<ul>
 				<li>Just simply click the "Remove ALL Students" button on the right of the "Add Student" button.</li>
 				<li style = "font-weight: bold;">WARNING! This will remove all students.</li>
-			</ol>
+			</ul>
 			<li>To Remove One Students:</li>
-			<ol style="list-style-type: upper-roman">
+			<ul>
 				<li>Click the "Remove (Student Name)" button below the drop down list.</li>
-			</ol>
+			</ul>
 		</ul>
 
 		<p>Add a student:</p>
@@ -65,17 +65,23 @@
 		<input type = "number" min = "0" id = "inpChats" value = "0">
 
 		<p>Remove the current student you selected:</p>
-		<input type = "button" value = "Remove This Student" onclick = "removeThis()" id = "btnRmThis">
+		<input type = "button" value = "Remove This Student" onclick = "removeByName(optStu.value)" id = "btnRmThis">
 		
 		<!-- Enter buttons which call functions below. -->
 		
 		<!-- Enter h3/h2 tags for the result/s below. -->
 		
-		<h3>The students' current average grade:</h3>
-		<p id = "tagAnalyze">Analytics will display here when at least there is one valid input for one student.</p>
+		<h2>The students' current average grade:</h3>
+		<h3 id = "tagAnalyze">Analytics will display here when at least there is one valid input for one student.</h3>
 		<ul id = "ulScore">
 			<li id = "scoreEric" style = "font-weight: bold;">Eric: Begin by selecting this student and then type in the inputs</li>
+			<input id = "btnSelEric" type = "button" value = "Selected" onclick = "selectByName('Eric')" disabled>
+			<input id = "btnRmEric" type = "button" onclick = "removeByName('Eric')" value = "Remove">
+			<br id = "br1Eric"><br id = "br2Eric">
 			<li id = "scoreVincent">Vincent: Begin by selecting this student and then type in the inputs</li>
+			<input id = "btnSelVincent" type = "button" value = "Select" onclick = "selectByName('Vincent')">
+			<input id = "btnRmVincent" type = "button" value = "Remove" onclick = "removeByName('Vincent')">
+			<br id = "br1Vincent"><br id = "br2Vincent">
 		</ul>
 		
 		<script>
@@ -84,6 +90,12 @@
 				Type JavaScript code and functions below.
 				I prefer a function name to start with calc if
 				calculates something.
+			*/
+
+			/* 2022-10-11
+
+			Fix: creation of new student's buttons
+
 			*/
 
 			// Run when loaded
@@ -100,20 +112,60 @@
 			var btnRmThis = document.getElementById("btnRmThis")
 
 			optStu.onchange = function () {
-				inpWorks.value = stuData[optStu.value].work
-				inpChats.value = stuData[optStu.value].chat
+				selectByName(optStu.value)
+			}
 
-				
+			function removeByName(name) {
+				document.getElementById("score" + name).remove()
+				document.getElementById("inOp" + name).remove()
+				document.getElementById("btnSel" + name).remove()
+				document.getElementById("btnRm" + name).remove()
+				document.getElementById("br1" + name).remove()
+				document.getElementById("br2" + name).remove()
+				delete stuData[name]
+				if (Object.keys(stuData).length == 0) {
+					inpWorks.disabled = true;
+					inpWorks.innerHTML = "";
+					inpChats.disabled = true;
+					inpChats.innerHTML = "";
+					btnRmThis.disabled = true;
+					btnRmThis.value = "Remove Nobody"
+					tagAnalyze.innerHTML = "Analytics will display here when at least there is one valid input for one student."
+					inpWorks.value = null
+					inpChats.value = null
+					tagStuAmt.innerHTML = `Select a student (There are currently no students yet)`
+				} else {
+					btnRmThis.value = "Remove " + optStu.value;
+					inpWorks.value = stuData[optStu.value].work
+					inpChats.value = stuData[optStu.value].chat
+					tagStuAmt.innerHTML = `Select a student (There are currently ${Object.keys(stuData).length} students)`
+					refreshBoldSelect()
+				}
+			}
+
+			function selectByName(name) {
+
+				optStu.value = name
+
+				inpWorks.value = stuData[name].work
+				inpChats.value = stuData[name].chat
+
+				btnRmThis.value = "Remove " + optStu.value;
+
+				refreshBoldSelect()
+			}
+
+			function refreshBoldSelect() {
 				let nodes = ulScore.childNodes;
 				for (i = 0; i < nodes.length; i ++) {
 					if (nodes[i].id == "score" + optStu.value) {
 						nodes[i].style = "font-weight: bold;"
+						document.getElementById("btnSel" + optStu.value).value = "Selected"
+						document.getElementById("btnSel" + optStu.value).disabled = true
 					} else {
 						nodes[i].style = null
 					}
 				}
-
-				btnRmThis.value = "Remove " + optStu.value;
 			}
 
 			function getLetterGrade(score) {
@@ -144,36 +196,12 @@
 				}
 			}
 
-			function removeThis() {
-				let name = optStu.value;
-				document.getElementById("score" + name).remove()
-				document.getElementById("inOp" + name).remove()
-				delete stuData[name]
-				if (Object.keys(stuData).length == 0) {
-					inpWorks.disabled = true;
-					inpWorks.innerHTML = "";
-					inpChats.disabled = true;
-					inpChats.innerHTML = "";
-					btnRmThis.disabled = true;
-					btnRmThis.value = "Remove Nobody"
-					tagAnalyze.innerHTML = "Analytics will display here when at least there is one valid input for one student."
-					inpWorks.value = null
-					inpChats.value = null
-					tagStuAmt.innerHTML = `Select a student (There are currently no students yet)`
-				} else {
-					btnRmThis.value = "Remove " + optStu.value;
-					inpWorks.value = stuData[optStu.value].work
-					inpChats.value = stuData[optStu.value].chat
-					tagStuAmt.innerHTML = `Select a student (There are currently ${Object.keys(stuData).length} students)`
-				}
-			}
-
 			function addStudent() {
 				let name = inpStu.value
 
 				if (Object.keys(stuData).includes(name)) {
 					alert(`The student with name "${name}" already exsists. Please pick a new name.`)
-				} else if (name.replace(" ", "") == "") {
+				} else if (name.replaceAll(" ", "") == "") {
 					alert("Invalid name! You must enter something!")
 				} else {
 					let e1 = document.createElement("option")
@@ -187,6 +215,20 @@
 					e.id = "score" + name
 					ulScore.appendChild(e)
 
+					let btnSel = document.createElement("input")
+					btnSel.type = "button"
+					btnSel.value = "Select"
+					btnSel.onclick = 'selectByName("' + name + '")'
+					btnSel.id = "btnSel" + name
+					ulScore.appendChild(btnSel)
+
+					let btnRm = document.createElement("input")
+					btnRm.type = "button"
+					btnRm.value = "Remove"
+					btnRm.onclick = `removeByName("${name}")`
+					btnRm.id = "btnRm" + name
+					ulScore.appendChild(btnRm)
+
 					stuData[name] = {"chat": 0, "work": 0}
 
 					inpStu.value = ""
@@ -197,6 +239,8 @@
 					btnRmThis.value = "Remove " + optStu.value;
 
 					tagStuAmt.innerHTML = `Select a student (There are currently ${Object.keys(stuData).length} students)`
+
+					
 				}
 
 				
