@@ -58,10 +58,10 @@
 			<option value="Vincent" id = "inOpVincent">Vincent</option>
 		</select>
 
-		<p>Enter the total amount of classworks:</p>
+		<p>Enter the total amount of classworks (for this student):</p>
 		<input type = "number" min="0" id = "inpWorks" value = "0">
 
-		<p>Enter the total amount of times chatted:</p>
+		<p>Enter the total amount of times chatted (for this student):</p>
 		<input type = "number" min = "0" id = "inpChats" value = "0">
 
 		<p>Remove the current student you selected:</p>
@@ -145,6 +145,10 @@
 
 			function selectByName(name) {
 
+				let btn = document.getElementById("btnSel" + optStu.value)
+				btn.disabled = null
+				btn.value = "Select"
+
 				optStu.value = name
 
 				inpWorks.value = stuData[name].work
@@ -203,6 +207,8 @@
 					alert(`The student with name "${name}" already exsists. Please pick a new name.`)
 				} else if (name.replaceAll(" ", "") == "") {
 					alert("Invalid name! You must enter something!")
+				} else if (name.includes(" ")) {
+					alert("The name cannot contain spaces.")
 				} else {
 					let e1 = document.createElement("option")
 					e1.value = name;
@@ -218,16 +224,24 @@
 					let btnSel = document.createElement("input")
 					btnSel.type = "button"
 					btnSel.value = "Select"
-					btnSel.onclick = 'selectByName("' + name + '")'
+					btnSel.setAttribute("onclick", 'selectByName("' + name + '")')
 					btnSel.id = "btnSel" + name
 					ulScore.appendChild(btnSel)
 
 					let btnRm = document.createElement("input")
 					btnRm.type = "button"
 					btnRm.value = "Remove"
-					btnRm.onclick = `removeByName("${name}")`
+					btnRm.setAttribute("onclick", `removeByName("${name}")`)
 					btnRm.id = "btnRm" + name
 					ulScore.appendChild(btnRm)
+
+					let br1 = document.createElement("br")
+					br1.id = "br1" + name
+					ulScore.appendChild(br1)
+
+					let br2 = document.createElement("br")
+					br2.id = "br2" + name
+					ulScore.appendChild(br2)
 
 					stuData[name] = {"chat": 0, "work": 0}
 
