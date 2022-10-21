@@ -7,7 +7,7 @@
 			e.g. 01.01 Average (simple) Joe Bloggs	
 		-->
 		
-		<h1>03.01 Factorial Eric Wong</h1>
+		<h1>03.05 Adding Numbers from 1 chosen number to another Eric Wong</h1>
 		
 		<!-- Type short instructions below using a p tag. -->
 		
@@ -16,18 +16,21 @@
 			(also use br tags to create new lines if necessary).
 		-->
 		
-		<p>Please enter a number to calculate the factorial:</p>
-		<input type = "number" id = "inpNum" min = "0">
-		
-		<!-- Enter buttons which call functions below. -->
+		<p>Please enter two numbers:</p>
+
+		<input type = "number" id = "inpNum1">
+
+		<input type = "number" id = "inpNum2">
+
 		<br><br>
 		
-		<input type = "button" onclick = "calcFact()" value = "Calculate Factorial">
+		<!-- Enter buttons which call functions below. -->
+		
+		<input type = "button" onclick = "calcRangeSum()" value = "Submit">
 		
 		<!-- Enter h3/h2 tags for the result/s below. -->
-		
-		<h3>Factorial:</h3>
-		<h2 id = "tagFact"></h2><!--Previous: <h2 id="tagFact"></h2> - This was added because we need to put spaces before and after a equal sign-->
+
+		<h2 id = "tagSum"></h2>
 		
 		<script>
 			
@@ -36,26 +39,36 @@
 				I prefer a function name to start with calc if
 				calculates something.
 			*/
-
-			// Removed Litter Message: qwertyuiopasdfghjklzxcvbnm
 			
-			function calcFact() {
+			function calcRangeSum() {
 				
-				let num = document.getElementById("inpNum").valueAsNumber;
-				let factorial = 1 // Previous: let res = 1 - Was changed to "factorial" from "res" because factorial is a more meaningful name and easier for people do understand its usage.
-				let tagFact = document.getElementById("tagFact")
+				let num1 = document.getElementById("inpNum1").valueAsNumber;
+				let num2 = document.getElementById("inpNum2").valueAsNumber;
 
-				if (isNaN(num)) {
-					tagFact.innerHTML = ""
-					alert("Please enter a number first!")
-				} else if (num < 0) {
-					tagFact.innerHTML = "Calculating the factorial of a negative number is not supported."
-				} else {
-					for (let i = 2; i <= num; i ++) {
-						factorial *= i
+				let tagSum = document.getElementById("tagSum")
+				
+				let sum = 0
+
+				// for (let i = Math.min(num1, num2); i <= Math.max(num1, num2); i ++) {
+				// 	sum += i
+				// }
+
+				if (isNaN(num1) || isNaN(num2)) {
+					alert("Please enter both of the number inputs!")
+					tagSum.innerHTML = ""
+				} else if (num1 < num2) {
+					for (let i = num1; i <= num2; i ++) {
+						sum += i
 					}
-					tagFact.innerHTML = res
+					tagSum.innerHTML = "Sum: " + sum
+				} else {
+					for (let i = num2; i <= num1; i ++) {
+						sum += i
+					}
+					tagSum.innerHTML = "Sum: " + sum
 				}
+
+				
 			}
 			
 		</script>
