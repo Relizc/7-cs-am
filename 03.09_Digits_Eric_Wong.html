@@ -7,7 +7,7 @@
 			e.g. 01.01 Average (simple) Joe Bloggs	
 		-->
 		
-		<h1>03.01 Factorial Eric Wong</h1>
+		<h1>03.09 Digits Eric Wong</h1>
 		
 		<!-- Type short instructions below using a p tag. -->
 		
@@ -16,18 +16,23 @@
 			(also use br tags to create new lines if necessary).
 		-->
 		
-		<p>Please enter a number to calculate the factorial:</p>
-		<input type = "number" id = "inpNum" min = "0">
+		<p>Please enter a number:</p>
+		<input type = "number" id = "inpNum">
 		
 		<!-- Enter buttons which call functions below. -->
-		<br><br>
 		
-		<input type = "button" onclick = "calcFact()" value = "Calculate Factorial">
+		<input type = "button" onclick = "showDigit()" value = "Show">
 		
 		<!-- Enter h3/h2 tags for the result/s below. -->
 		
-		<h3>Factorial:</h3>
-		<h2 id = "tagFact"></h2><!--Previous: <h2 id="tagFact"></h2> - This was added because we need to put spaces before and after a equal sign-->
+		<h3>Digits in order of increasing place value:</h3>
+		<h2 id = "tagInc"></h2>
+
+		<h3>Digits in order of decreasing place value:</h3>
+		<h2 id = "tagDec"></h2>
+
+		<h3>Digits:</h3>
+		<h2 id = "tagDigits"></h2>
 		
 		<script>
 			
@@ -36,25 +41,42 @@
 				I prefer a function name to start with calc if
 				calculates something.
 			*/
-
-			// Removed Litter Message: qwertyuiopasdfghjklzxcvbnm
 			
-			function calcFact() {
+			function showDigit() {
 				
 				let num = document.getElementById("inpNum").valueAsNumber;
-				let factorial = 1 // Previous: let res = 1 - Was changed to "factorial" from "res" because factorial is a more meaningful name and easier for people do understand its usage.
-				let tagFact = document.getElementById("tagFact")
+
+				let tagInc = document.getElementById("tagInc")
+				let tagDec = document.getElementById("tagDec")
+				let tagDigits = document.getElementById("tagDigits")
+				
+				let digits = 0
+
+				tagInc.innerHTML = ""
+				tagDec.innerHTML = ""
+				tagDigits.innerHTML = ""
 
 				if (isNaN(num)) {
-					tagFact.innerHTML = ""
-					alert("Please enter a number first!")
-				} else if (num < 0) {
-					tagFact.innerHTML = "Calculating the factorial of a negative number is not supported."
+					alert("Please enter a number!")
 				} else {
-					for (let i = 2; i <= num; i ++) {
-						factorial *= i
+					let temp = num
+					while (temp != 0) {
+						let lastDigit = (temp % 10)
+						tagInc.innerHTML += lastDigit + "<br>"
+						temp -= lastDigit
+						temp /= 10
+						digits ++
 					}
-					tagFact.innerHTML = res
+
+					tagDigits.innerHTML = digits
+
+					temp = num
+					for (let i = digits - 1; i >= 0; i --) {
+						let remaining = temp % (10 ** i)
+						let topDigit = (temp - remaining) / (10 ** i)
+						temp -= topDigit * (10 ** i)
+						tagDec.innerHTML += topDigit + "<br>"
+					}
 				}
 			}
 			
