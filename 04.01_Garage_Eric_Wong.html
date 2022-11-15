@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 	<head></head>
 	<body>
@@ -7,28 +7,25 @@
 			e.g. 01.01 Average (simple) Joe Bloggs	
 		-->
 		
-		<h1>?</h1>
+		<h1>04.01 Garage Eric Wong</h1>
 		
 		<!-- Type short instructions below using a p tag. -->
-		
-		<p>Please ?</p>
 		
 		<!--
 			Enter short labels using p tags and input boxes below
 			(also use br tags to create new lines if necessary).
 		-->
 		
-		<p>?:</p>
-		<input type = "number" id = "inp?">
+		<p>Please enter the work time in the format <strong>hours:minutes</strong></p>
+		<input type = "text" id = "inpTime">
 		
 		<!-- Enter buttons which call functions below. -->
 		
-		<input type = "button" onclick = "calc?()" value = "?">
+		<input type = "button" onclick = "calcWork()" value = "Check">
 		
 		<!-- Enter h3/h2 tags for the result/s below. -->
-		
-		<h3>?:</h3>
-		<h2 id="tag?"></h2>
+
+		<h2 id="tagHalfhrs"></h2>
 		
 		<script>
 			
@@ -38,11 +35,37 @@
 				calculates something.
 			*/
 			
-			function calc?() {
+			function calcWork() {
+
+				let tagHalfhrs = document.getElementById("tagHalfhrs")	
 				
-				let ? = document.getElementById("inp?").valueAsNumber;
-				
-				document.getElementById("tag?").innerHTML =  ?;
+				let timeStr = document.getElementById("inpTime").value
+				let colonPos = timeStr.indexOf(":")
+
+				let hrs = timeStr.substring(0, colonPos)
+				let mins = timeStr.substring(colonPos + 1)
+
+				if (timeStr.length == 0) {
+					alert("Please enter a time!")
+					tagHalfhrs.innerHTML = ""
+				} else if (timeStr.search(":") == -1) {
+					alert("Please enter a colon to seperate the hours and the minutes!")
+					tagHalfhrs.innerHTML = ""
+				} else if (mins >= 60) { // This is the first time pretending that strings are integers.
+					tagHalfhrs.innerHTML = "The minutes you entered must be < 60!"
+				} else if (hrs < 0 || mins < 0) {
+					tagHalfhrs.innerHTML = "The minutes and hours you entered must be >= 0!"
+				} else {
+					let numHalfhrs = hrs * 2
+
+					if (mins > 30) {
+						numHalfhrs += 2
+					} else if (mins > 0) {
+						numHalfhrs += 1
+					}
+
+					tagHalfhrs.innerHTML = "Number of half hours: " + numHalfhrs
+				}
 			}
 			
 		</script>

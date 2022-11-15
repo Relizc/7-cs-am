@@ -7,7 +7,7 @@
 			e.g. 01.01 Average (simple) Joe Bloggs	
 		-->
 		
-		<h1>03.09 Digits Eric Wong</h1>
+		<h1>04.02 Search For a Letter Eric Wong</h1>
 		
 		<!-- Type short instructions below using a p tag. -->
 		
@@ -16,23 +16,21 @@
 			(also use br tags to create new lines if necessary).
 		-->
 		
-		<p>Please enter a number:</p>
-		<input type = "number" id = "inpNum">
+		<p>Please enter some text:</p>
+		<input type = "text" id = "inpTxt">
+
+		<p>Please enter the letter that you want to search for:</p>
+		<input type = "text" id = "inpLetter">
+
+		<br><br>
 		
 		<!-- Enter buttons which call functions below. -->
 		
-		<input type = "button" onclick = "showDigit()" value = "Show">
+		<input type = "button" onclick = "calcSearch()" value = "Search">
 		
 		<!-- Enter h3/h2 tags for the result/s below. -->
-		
-		<h3>Digits in order of increasing place value:</h3>
-		<h2 id = "tagInc"></h2>
 
-		<h3>Digits in order of decreasing place value:</h3>
-		<h2 id = "tagDec"></h2>
-
-		<h3>Digits:</h3>
-		<h2 id = "tagDigits"></h2>
+		<h2 id="tagFound"></h2>
 		
 		<script>
 			
@@ -42,53 +40,24 @@
 				calculates something.
 			*/
 			
-			function showDigit() {
+			function calcSearch() {
 				
-				let num = document.getElementById("inpNum").valueAsNumber;
+				let txt = document.getElementById("inpTxt").value;
+				let letter = document.getElementById("inpLetter").value;
+				let tagFound = document.getElementById("tagFound")
+				let count = 0
 
-				let tagInc = document.getElementById("tagInc")
-				let tagDec = document.getElementById("tagDec")
-				let tagDigits = document.getElementById("tagDigits")
-				
-				let digits = 0
+				tagFound.innerHTML = ""
 
-				tagInc.innerHTML = ""
-				tagDec.innerHTML = ""
-				tagDigits.innerHTML = ""
-
-				if (isNaN(num)) {
-					alert("Please enter a number!")
-				} else if (num == 0) {
-					tagInc.innerHTML = "0"
-					tagDec.innerHTML = "0"
-					tagDigits.innerHTML = "1"
+				if (letter.length != 1 || txt.length == 0) {
+					alert("One or more of the inputs enter is invalid!")
 				} else {
-					let temp = Math.abs(num)
-					while (temp != 0) {
-						let lastDigit = (temp % 10)
-						temp -= lastDigit
-						temp /= 10
-						if (temp == 0 && num < 0) {
-							tagInc.innerHTML += -lastDigit + "<br>"
-						} else {
-							tagInc.innerHTML += lastDigit + "<br>"
-						}
-						digits ++
-					}
-
-					tagDigits.innerHTML = digits
-
-					temp = Math.abs(num)
-					for (let i = digits - 1; i >= 0; i --) {
-						let remaining = temp % (10 ** i)
-						let topDigit = (temp - remaining) / (10 ** i)
-						temp -= topDigit * (10 ** i)
-						if (i == digits - 1 && num < 0) {
-							tagDec.innerHTML += -topDigit + "<br>"
-						} else {
-							tagDec.innerHTML += topDigit + "<br>"
+					for (let i = 0; i < txt.length; i ++) {
+						if (txt[i] == letter) {
+							count ++;
 						}
 					}
+					tagFound.innerHTML = letter + " is found " + count + " time(s)."
 				}
 			}
 			
