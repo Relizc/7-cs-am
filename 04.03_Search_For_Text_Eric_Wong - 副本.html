@@ -34,7 +34,7 @@
 		
 		<!-- Enter h3/h2 tags for the result/s below. -->
 
-		<h2 id="tagFound"></h2>
+		<h2 id = "tagFound"></h2>
 		
 		<script>
 			
@@ -50,31 +50,44 @@
 				let searchTxt = document.getElementById("inpSearch").value;
 				let tagFound = document.getElementById("tagFound")
 				let fullWords = document.getElementById("chkWholeWords").checked;
-
-				console.log(fullWords)
+				let count = 0;
 
 				tagFound.innerHTML = ""
 
-				let count = 0;
-
-				if (fullWords) {
-					for (let i = 0; i < txt.length; i ++) {
-						if (txt.substring(i, i + searchTxt.length) == searchTxt && 
-						(txt.substring(i - 1, i) == "" || txt.substring(i - 1, i) == " ") && 
-						(txt.substring(i + searchTxt.length, i + searchTxt.length + 1) == "" || txt.substring(i + searchTxt.length, i + searchTxt.length + 1) == " ")) {
-							count ++
-						}
-					}
+				if (txt.length == 0 || searchTxt.length == 0) {
+					alert("Please enter both of the inputs!")
 				} else {
+
+					/*
+					I used this method because a "full word" is defined as there are spaces infront and on the back of the word.
+					Therefore, I add a space to the infront and the end of the txt so all the individual words can have a space in the front and the end.
+					*/
+
+					if (fullWords) {
+						txt = " " + txt + " "
+						searchTxt = " " + searchTxt + " "
+					}
+
+					/*
+					I changed txt.length to txt.length - searchTxt.length + 1 because if the for loop is doing a regular search, 
+					it will encounter some sort of index error. To prevent this we need to subtract the searchTxt.length and +1 so javascript can ignore to search the text with index errors.
+					*/
+
 					for (let i = 0; i < txt.length - searchTxt.length + 1; i ++) {
+
+						/*
+						I changed .substring(i, i + 1) to .substring(i, i + searchTxt.legnth) because now we are searching for a range of text, not one single character.
+						Therefore, we need to add the searchTxt.length in order to make .substring search more text, rather than a character.
+						*/
+
 						console.log(txt.substring(i, i + searchTxt.length).replaceAll(" ", "."))
 						if (txt.substring(i, i + searchTxt.length) == searchTxt) {
 							count ++
 						}
 					}
-				}
 
-				tagFound.innerHTML = searchTxt + " was found " + count + " time(s)."
+					tagFound.innerHTML = searchTxt + " was found " + count + " time(s)."
+				}
 			}
 			
 		</script>
