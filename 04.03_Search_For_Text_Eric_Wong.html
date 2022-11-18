@@ -7,7 +7,7 @@
 			e.g. 01.01 Average (simple) Joe Bloggs	
 		-->
 		
-		<h1>04.02 Search For a Letter Eric Wong</h1>
+		<h1>04.03 Search For Text Eric Wong</h1>
 		
 		<!-- Type short instructions below using a p tag. -->
 		
@@ -19,14 +19,18 @@
 		<p>Please enter some text:</p>
 		<input type = "text" id = "inpTxt">
 
-		<p>Please enter the letter that you want to search for:</p>
-		<input type = "text" id = "inpLetter">
+		<p>Please enter the tex you want to search for:</p>
+		<input type = "text" id = "inpSearch">
 
 		<br><br>
+		<input type = "checkbox" id = "chkWholeWords" value = " Find whole words only">
+		<label>Find whole words only</label>
+		<br><br>
+
 		
 		<!-- Enter buttons which call functions below. -->
 		
-		<input type = "button" onclick = "calcSearch()" value = "Search">
+		<input type = "button" onclick = "search()" value = "Search">
 		
 		<!-- Enter h3/h2 tags for the result/s below. -->
 
@@ -40,25 +44,37 @@
 				calculates something.
 			*/
 			
-			function calcSearch() {
+			function search() {
 				
 				let txt = document.getElementById("inpTxt").value;
-				let letter = document.getElementById("inpLetter").value;
+				let searchTxt = document.getElementById("inpSearch").value;
 				let tagFound = document.getElementById("tagFound")
-				let count = 0
+				let fullWords = document.getElementById("chkWholeWords").checked;
+
+				console.log(fullWords)
 
 				tagFound.innerHTML = ""
 
-				if (letter.length != 1 || txt.length == 0) {
-					alert("One or more of the inputs enter is invalid!")
-				} else {
+				let count = 0;
+
+				if (fullWords) {
 					for (let i = 0; i < txt.length; i ++) {
-						if (txt.substring(i, i + 1) == letter) {
-							count ++;
+						if (txt.substring(i, i + searchTxt.length) == searchTxt && 
+						(txt.substring(i - 1, i) == "" || txt.substring(i - 1, i) == " ") && 
+						(txt.substring(i + searchTxt.length, i + searchTxt.length + 1) == "" || txt.substring(i + searchTxt.length, i + searchTxt.length + 1) == " ")) {
+							count ++
 						}
 					}
-					tagFound.innerHTML = letter + " is found " + count + " time(s)."
+				} else {
+					for (let i = 0; i < txt.length - searchTxt.length + 1; i ++) {
+						console.log(txt.substring(i, i + searchTxt.length).replaceAll(" ", "."))
+						if (txt.substring(i, i + searchTxt.length) == searchTxt) {
+							count ++
+						}
+					}
 				}
+
+				tagFound.innerHTML = searchTxt + " was found " + count + " time(s)."
 			}
 			
 		</script>
