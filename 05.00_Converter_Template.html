@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			table,
+			th,
+			td {
+				padding: 5px;
+				border: 1px solid #000000;
+				border-collapse: collapse;
+				text-align:center;
+				table-layout: fixed;
+				width: 20%;
+      			}
+			
+			input {text-align: center;}
+    		</style>
+	</head>
+	<body>
+		<h1>05.01 Binary <-> Decimal Converter</h1>
+		
+		<p>Binary Number:</p>
+		<table id = "tblBits">
+  			<tr>
+				<td>?</td>
+				
+				<!-- 
+					What is the decimal place value of the first bit?
+					Note that we show the bits from right -> left in increasing place value.
+					
+					Copy and paste the line above 7 times for each of the 8 bits and change the decimal place value.
+				-->
+			</tr>
+			<tr>
+				<td><input type = "button" id = "btn?" onclick = "convDec(this.id)" value = "0"></td>
+				
+				<!-- Copy and paste the line above 7 times for each of the 8 bits and change the id (decimal place value). -->
+			</tr>
+		</table>
+		<h3>Number In Decimal:</h3>
+		<input type = "number" oninput = "convBin()" id = "inpDecNum" min = 0 max = 255 value = "0">
+		
+		<script>
+			function convDec(btn) {
+				
+				/*
+					How do we know the id of the button that has been clicked so we can 
+					switch it from 0 -> 1 or 1 -> 0?
+					(See the name of variable passed to this function inside (...) of the 
+					function header above.)
+				*/
+				let btnClicked = document.getElementById(?);
+				
+				/* 
+				We only switch a bit if a button was clicked,
+				i.e. If an invalid decimal was entered then we need to return
+				the decimal number to whatever the button bits currently represent
+				but don't switch any bits. 
+				*/
+				if (btnClicked != null)
+					
+					// If the value of the button is ? switch it to a ? else a ?.
+					
+					if (btnClicked.value == ?)
+						btnClicked.value = ?;
+					else
+						btnClicked.value = ?;
+				
+				
+				// What is the id of the table with all the "binary bit" buttons?
+				let bits = document.getElementById("?").getElementsByTagName('input');
+				
+				/* 
+					The variable below will hold the decimal equivalent of the bits in the table.
+					What should it be initialised to?
+				*/
+				let decNum = ?;
+				
+				/* 
+					The variable below will hold the decimal place value of each bit.
+					What is the decimal place value of the first bit?
+					Note that we go through all the bits from left -> right.
+				*/
+				let placeVal = ?;
+				
+				for (let b of bits){
+					
+					/* 
+						Which variable holds the decimal equivalent of the bits in the table?
+						Which variable holds the place value of each bit to multiply by?
+					*/
+					? += b.value * ?;
+					
+					// Which variable needs halving for each "bit"?
+					? /= 2;
+				}
+				
+				/* 
+					What is the id of the input box which shows the decimal equivalent of the bits in the table?
+					Which variable needs to be displayed there?
+				*/
+				document.getElementById("inp?").value = ?;
+				
+			}
+			
+			function convBin() {
+				
+				// What is the id of the input box which holds the decimal number to convert to binary?
+				let decNum = document.getElementById("inp?").valueAsNumber;
+				
+				// What is the lowest decimal number that can be represented by 8 bits in this converter?
+				if (decNum < ?) {
+					alert("This converter does not deal with numbers < ? !"); // Or "... with ? numbers!"
+					convDec(); // Call the convDec() function to reconvert what the bits show.
+				}
+				
+				// What is the highest decimal number that can be represented by 8 bits in this converter?
+				else if (decNum > ?) {
+					alert("This converter does not deal with numbers > ? !");
+					convDec(); // Convert the binary number currently showing to decimal.
+				}
+				
+				else {
+					// What is the id of the table with all the "binary bit" buttons?
+					let bits = document.getElementById("tbl?").getElementsByTagName('input');
+					
+					/* 
+						The variable below will hold the place value of each bit.
+						What should it be initialised to (note that we go through all the bits from
+						left -> right).
+					*/
+					let placeVal = ?;
+					
+					for (let b of bits){
+						
+						// What do we need to check before deciding to use a 0 or 1?
+						if (decNum >= ?){
+							
+							// Do we write a 1 or 0?
+							b.value = ?;
+							
+							// What do we subtract from the decimal number?
+							decNum -= ?;
+						}
+						else
+							// Do we write a 1 or 0?
+							b.value = ?;
+						
+						// What happens to the place value of each bit as we go from left -> right?
+						placeVal /= ?;
+					}
+				}
+			}
+		</script>
+		
+		<p>Proposed %'s:</p>
+		<ul>
+			<li>100% - works as shown here & all previous code clarity and design points have been followed including:</li>
+			<ul>
+				<li>When creating button ids use <i>btn</i> to start the id.</li>
+				<li>Use <i>this.id</i> to send the id of the button clicked to a function.</li>
+				<ul>
+					<li>We do this so we can change the button clicked to <i>1</i> or <i>0</i>.</li>
+				</ul>
+				<li>When dealing with anything other than number inputs, must use <i>.value</i>, not <i>.valueAsNumber</i>.</li>
+				<li>There are actually 9 inputs:</li>
+				<ul>
+					<li>The 8 bits <i>(buttons)</i> + the decimal number input box.</li>
+					<ul>
+						<li>Therefore we need to have a way to differentiate between them.</li>
+						<ul>
+							<li>I suggest:
+							<ul>
+								<li>Give the table with the 8 bits an <i>id</i> e.g. <i>tblBinary</i>.</li>
+								<li>
+									Use this <i>id</i> to get all the buttons in this id and 
+									put them in an array <i>(list)</i>.
+								</li>
+								<ul>
+									<li>e.g.</li>
+									<ul>
+										<li>
+											<i>let bits = 
+											document.getElementById("tblBinary").getElementsByTagName('input');</i>
+										</li>
+									</ul>
+								</ul>
+								<li>
+									Refer to each button with a loop which goes through each button 
+									<i>(the first one is the bit for 128 and the last one the bit for 1)</i>.
+								</li>
+								<li>e.g.</li>
+									<ul>
+										<li><i>for (let b of bits){</i></li>
+										<ul>
+											<li><i>if (decNum >= placeVal)</i></li>
+											<ul>
+												<li><i>b.value = 1;</i></li>
+											</ul>
+											<li><i>else</i></li>
+											<ul>
+												<li><i>b.value = 0;</i></li>
+											</ul>
+										</ul>
+										<li><i>}</i></li>
+									</ul>
+								<li>
+									If we didn't do this then we would have to use 8 different ids to refer to each of these 
+									8 buttons individually by a unique <i>id</i>.
+								</li>
+							</ul>
+						</ul>
+					</ul>
+				</ul>
+			</ul>
+			<li>93% - one way conversion only & all previous code clarity and design points have been followed</li>
+			<li>86% - one way conversion only but none or only some of the code clarity and design points have been followed</li>
+			<li>79% - attempted but doesn't work but all the code clarity and design points have been followed.</li>
+			<li>72% - attempted but doesn't work & none or only some of the code clarity and design points have been followed.</li>
+		</ul>
+	</body>
+</html>
+
+<!--
+Notes:
+1. When creating button ids use btn to start the id.
+
+2. Use this.id to send the id of the button clicked to a function.
+We do this so we can change the button clicked to 1 or 0.
+
+3. When dealing with anything other than number inputs, must use .value, not .valueAsNumber.
+document.getElementById('btn128').value * 128
+
+4. There actually 10 inputs:
+(the 8 bits (buttons) + decimal number input + another button to convert the decimal number).
+
+Therefore we need to have a way to differentiate between them.
+The easiest way is to give the table with the 8 bits an id e.g. tblBinary.
+Then use this id to get all the buttons in this id and put them in an array (list).
+
+e.g.
+let bits = document.getElementById("tblBinary").getElementsByTagName('input');
+
+We can refer to each button with a loop which goes through each button
+(the first one is the bit for 128 and the last one the bit for 1).
+
+e.g.
+for (let b of bits){
+	if (decNum >= placeVal)
+		b.value = 1;
+	else
+		b.value = 0;
+	placeVal /= 2;
+}
+
+
+If we didn't do this then we would have to use 8 different ids to refer to each of these 
+8 buttons individually.
+
+As the only other input we need to refer to is the decimal number input then we can just refer to by 
+giving it its own unique id.
+
+Suggested max % levels:
+100% = works as shown here and all 
+some attempt to convert in 1 direction
+84% = 1 way conversion only.
+94% = 2 way conversion but no & HTML JavaScript code restrictions
+-->

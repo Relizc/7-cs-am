@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+	<head></head>
+	<body>
+		<h1>04.05 Capitals (Upper Case) <-> Lower Case</h1>
+		
+		<p>Capital (Upper Case):</p>
+		<input type = "text" maxlength = "1" id = "inpCap" oninput = "convLower()">
+		
+		<br>
+		
+		<p>Lower case:</p>
+		<input type = "text" id = "inpLow" oninput = "convCap()">
+		
+		<p>
+			<i>
+				If text is not a letter or not in capitals/lower case as appropriate, the text should<br>
+				not be converted and instead simply displayed in the &quot;other&quot; input box &quot;as is&quot;.
+			</i>
+		</p>
+		
+		<ul>
+			<li>To convert a character to its ASCII code:</li>
+			<ul>
+				<li><i><b>char</b>.charCodeAt(0)</i></li>
+				<ul>
+					<li><i>// <b>char</b> is a variable that holds the character to be converted to its ASCII code.</i></li>
+				</ul>
+			</ul>
+			<li>To convert an ASCII code to the character it represents:</li>
+			<ul>
+				<li><i>String.fromCharCode(<b>asciiCode</b>)</i></li>
+				<ul>
+					<li><i>// <b>asciiCode</b> is a variable that holds the ASCII code to be converted to the character it represents.</i></li>
+				</ul>
+			</ul>
+		</ul>
+		<br>
+		
+		<p><b>To do:</b></p>
+		<ol>
+			<li>Replace the ? marks in the <i>convLower()</i> function so that a capital letter is converted and displayed in the lower case input box.</li>
+			<ul>
+				<li>Explain the changes in a comment.</li>
+			</ul>
+			<li>
+				Add an <i>if</i> statement to see if the character is a not capital, if so, don't convert,<br>
+				simply display it in the &quot;other&quot; input box &quot;as is&quot;, otherwise convert it as above. 
+			</li>
+			<ul>
+				<li>Explain the changes in a comment.</li>
+			</ul>
+			<li>Adjust the code <i>(HTML & JavaScript)</i> so that the page can convert more than just one letter at a time.</li>
+			<ul>
+				<li>Explain the changes in a comment.</li>
+			</ul>
+			<li>
+				Complete <i>convCap()</i> function so that the page converts &quot;the other way around&quot;,<br>
+				that is, lower case letters to capital letters.
+			</li>
+			<ul>
+				<li>Add an <i>if</i> statement similiar to step 2 above.</li>
+				<ul>
+					<li>Explain the changes in a comment.</li>
+				</ul>
+			</ul>
+		</ol>
+		
+		<script>
+			function convLower() {
+				
+				// Store the character in inpCap in capChar.
+				let capChar = document.getElementById("inpCap").value;
+				
+				// Store the input box inpLow in a variable named lowChar.
+				let lowChar = document.getElementById("inpLow");
+				
+				// Clear inpLow.
+				lowChar.value = "";
+				
+				// Convert capChar to its ASCII code and store this code in asciiChar.
+				let asciiChar = ?.?;
+				
+				// Display the lowercase version of the code asciiChar represents in ASCII.
+				lowChar.value = ?.?(? ? ?);
+				
+			}
+			
+			function convCap() {
+				
+				
+				
+			}
+		</script>
+	</body>
+</html>
+
