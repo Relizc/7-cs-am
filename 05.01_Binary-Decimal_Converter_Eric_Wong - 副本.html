@@ -92,14 +92,14 @@
 
 				if (btnClicked != null)
 					
-					// If the value of the button is ? switch it to a ? else a ?.
+					// If the value of the button is 0 switch it to a 1 else a 0.
 
 					/* Explaination:
 						If the value of the button is 0, we have to switch it to a 1
 						otherwise, the value of the button must be 1, so we have to
 						switch it to 0.
 
-						In this case, we can toggle the button's value between 1 and 0
+						Therefore, we can toggle the button's value between 1 and 0.
 					*/
 					
 					if (btnClicked.value == 0)
@@ -118,7 +118,8 @@
 				*/
 				
 				/* Explaination:
-					The variable should be initlized to 128, because we are 
+					The variable should be initlized to 0, because we have to start with 0
+					for the conversion as there are no numbers being converted since the start.
 				*/
 				let decNum = 0;
 				
@@ -127,6 +128,12 @@
 					What is the decimal place value of the first bit?
 					Note that we go through all the bits from left -> right.
 				*/
+
+				/* Explaination:
+					The first decimal place value of the first bit is 128, since we are going from
+					left to right, and the leftmost bit is 2^7, which is 128.
+				*/
+
 				let placeVal = 128;
 				
 				for (let b of bits){
@@ -135,9 +142,26 @@
 						Which variable holds the decimal equivalent of the bits in the table?
 						Which variable holds the place value of each bit to multiply by?
 					*/
+
+					/* Explaination:
+						The "decNum" variable holds the decimal equivalent of the bits in the table, so we have to
+						add each binary place value to it each time we iterate through a bit.
+
+						The "placeVal" variable holds the binary place value in each bit, but we have to multiply
+						it by "b.value" since "b.value" represents whether there is a value on this bit or not (0 or 1).
+						If its a 0 we basically add nothing, but if it is 1, we add the placeVal.
+					*/
 					decNum += b.value * placeVal;
 					
 					// Which variable needs halving for each "bit"?
+
+					/* Explaination:
+						The placeVal variable needs to be halved each time we go through a bit, because the binary
+						place value halves as we go through each bit from left to right. For example, the first bit
+						is 2^7, which is 128, but the next bit is 2^6, which is 64. This shows we have to half the 
+						placeVal variable each time we go through a bit.
+					*/
+
 					placeVal /= 2;
 				}
 				
@@ -145,6 +169,12 @@
 					What is the id of the input box which shows the decimal equivalent of the bits in the table?
 					Which variable needs to be displayed there?
 				*/
+
+				/* Explaination:
+					The id of the input box is called inpDecNum (as in line 66), and we have to put the decimal result,
+					which is called "decNum" in the value of the input box (.value = decNum).
+				*/
+
 				document.getElementById("inpDecNum").value = decNum;
 				
 			}
@@ -152,15 +182,38 @@
 			function convBin() {
 				
 				// What is the id of the input box which holds the decimal number to convert to binary?
+				// Explaination: The id of the input box is called "inpDecNum" (line 66)
+
 				let decNum = document.getElementById("inpDecNum").valueAsNumber;
 				
 				// What is the lowest decimal number that can be represented by 8 bits in this converter?
+
+				/* Explaination:
+					The lowest decimal number that can be represented by this converter is when all the bits
+					are "off" (or 0), which in that case the equivalent decimal number is 0, so the lowest
+					convertable decimal number is 0.
+				*/
+
 				if (decNum < 0) {
-					alert("This converter does not deal with numbers < 0 !"); // Or "... with ? numbers!"
+					alert("This converter does not deal with numbers < 0 !"); // Or "... with negative numbers!"
+
+					/* Explaination
+						Since this converter cannot deal with decimal numbers below 0, it also means that this converter
+						cannot deal with negative numbers.
+					*/
+
 					convDec(); // Call the convDec() function to reconvert what the bits show.
 				}
 				
 				// What is the highest decimal number that can be represented by 8 bits in this converter?
+
+				/* Explaination:
+					Highest decimal number that can be represented is 255, as when all the bits are on (or 1). If
+					all the bits are on, we have to add all the binary place values from left to right, which is 
+					128 + 64 + 32 + 16 + 8 + 4 + 2 + 1 and the answer is 255. Therefore, the maximum value that can
+					be represented by 8 bits is 255, and if we go further, it will be an overflow and will cause errors.
+				*/
+
 				else if (decNum > 255) {
 					alert("This converter does not deal with numbers > 255 !");
 					convDec(); // Convert the binary number currently showing to decimal.
@@ -168,6 +221,8 @@
 				
 				else {
 					// What is the id of the table with all the "binary bit" buttons?
+					// Explaination: The id of the table with all the binary bits is called "tblBits" (line 23)
+
 					let bits = document.getElementById("tblBits").getElementsByTagName('input');
 					
 					/* 
@@ -175,24 +230,58 @@
 						What should it be initialised to (note that we go through all the bits from
 						left -> right).
 					*/
+
+					/* Explaination:
+						We are going from left to right again in the binary place value, so we have to start
+						with the binary place value of the leftmost bit, which is 128 (2^7).
+					*/
+
 					let placeVal = 128;
 					
 					for (let b of bits){
 						
 						// What do we need to check before deciding to use a 0 or 1?
+
+						/* Explaination:
+							We have to check whether the decimal number entered is larger or equal
+							to the placeVal, since we only "add a bit" or "change the bit to 1" if the
+							decimal number is greater or equal to the current bit's binary place value.
+						*/
+
 						if (decNum >= placeVal){
 							
 							// Do we write a 1 or 0?
+							// Explaination: if the decNum is larger or equal to placeVal, we have to change it to 1 as said above.
+
 							b.value = 1;
 							
 							// What do we subtract from the decimal number?
+							/* Explaination:
+								We have to subtract the placeVal from the decNum since we already added an bit in the binary value,
+								and equivalently we have to subtract the current bit's place value from decNum to prevent counting
+								this binary bit again in the future.
+							*/
+
 							decNum -= placeVal;
 						}
 						else
 							// Do we write a 1 or 0?
+							/* Explaination:
+								If the decNum is less than placeVal, this means that the decimal value doesn't occupy this current
+								binary bit's value. Therefore, we don't only need to write a 0 since we dont need to count this bit
+								to represent the decimal value.
+							*/
+
 							b.value = 0;
 						
 						// What happens to the place value of each bit as we go from left -> right?
+						/* Explaination:
+							As said above (line 158), The placeVal variable needs to be halved each time we go through a bit,
+							because the binary place value halves as we go through each bit from left to right. For example the
+							leftmost bit is 128, and the next bit is 64, so we have to half the placeVal when we go through
+							each bit from left to right.
+						*/
+						
 						placeVal /= 2;
 					}
 				}

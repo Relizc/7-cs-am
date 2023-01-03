@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			table,
+			th,
+			td {
+				padding: 5px;
+				border: 1px solid #000000;
+				border-collapse: collapse;
+				text-align:center;
+				table-layout: fixed;
+				width: 20%;
+      			}
+			
+			input {text-align: center;}
+    		</style>
+	</head>
+	<body>
+		<h1>05.02 Complement Binary <-> Decimal Converter Eric Wong</h1>
+		
+		<p>Binary Number:</p>
+		<table id = "tblBits">
+  			<tr>
+				<td>-128</td>
+				<td>64</td>
+				<td>32</td>
+				<td>16</td>
+				<td>8</td>
+				<td>4</td>
+				<td>2</td>
+				<td>1</td>
+				
+				<!-- 
+					What is the decimal place value of the first bit? 
+					Note that we show the bits from right -> left in increasing place value.
+					
+					Copy and paste the line above 7 times for each of the 8 bits and change the decimal place value.
+				-->
+
+				<!-- Explaination:
+					The decimal place value of the first bit from left to right is 128.
+					However, the first decimal plae value of the first bit from right to left is 1
+					
+					We have to paste it 7 more times because we need 8 bits to represent from 2^7 (128) to 2^0 (1)
+				-->
+			</tr>
+			<tr>
+				<td><input type = "button" id = "btn-128" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "btn64" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "btn32" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "btn16" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "btn8" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "btn4" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "btn2" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "btn1" onclick = "convDec(this.id)" value = "0"></td>
+				
+				<!-- Copy and paste the line above 7 times for each of the 8 bits and change the id (decimal place value). -->
+				
+				<!-- Explaination:
+					We also have to paste this 7 more times since there are 8 bits that we need to represent.
+				-->
+			</tr>
+		</table>
+		<h3>Number In Decimal:</h3>
+		<input type = "number" oninput = "convBin()" id = "inpDecNum" min = -128 max = 127 value = "0">
+		
+		<script>
+			function convDec(btn) {
+				
+				/*
+					How do we know the id of the button that has been clicked so we can 
+					switch it from 0 -> 1 or 1 -> 0?
+					(See the name of variable passed to this function inside (...) of the 
+					function header above.)
+				*/
+
+				/* Explaination:
+					We can get the id of the button by using the "btn" parameter, since the
+					id is already included when this function is called in the onclick 
+					function of the buttons. (... convDec(this.id) ...)
+				*/
+
+				let btnClicked = document.getElementById(btn);
+				
+				/* 
+				We only switch a bit if a button was clicked,
+				i.e. If an invalid decimal was entered then we need to return
+				the decimal number to whatever the button bits currently represent
+				but don't switch any bits. 
+				*/
+
+				if (btnClicked != null)
+					
+					// If the value of the button is 0 switch it to a 1 else a 0.
+
+					/* Explaination:
+						If the value of the button is 0, we have to switch it to a 1
+						otherwise, the value of the button must be 1, so we have to
+						switch it to 0.
+
+						Therefore, we can toggle the button's value between 1 and 0.
+					*/
+					
+					if (btnClicked.value == 0)
+						btnClicked.value = 1;
+					else
+						btnClicked.value = 0;
+				
+				
+				// What is the id of the table with all the "binary bit" buttons?
+				// Explaination: The id of the table with all the "binary bit" buttons is "tblBits" (line 23)
+				let bits = document.getElementById("tblBits").getElementsByTagName('input');
+				
+				/* 
+					The variable below will hold the decimal equivalent of the bits in the table.
+					What should it be initialised to?
+				*/
+				
+				/* Explaination:
+					The variable should be initlized to -128, because we have to start with -128
+					for the conversion as there are no numbers being converted since the start.
+				*/
+				let decNum = 0;
+				
+				/* 
+					The variable below will hold the decimal place value of each bit.
+					What is the decimal place value of the first bit?
+					Note that we go through all the bits from left -> right.
+				*/
+
+				/* Explaination:
+					The first decimal place value of the first bit is 128, since we are going from
+					left to right, and the leftmost bit is 2^7, which is 128.
+				*/
+
+				let placeVal = -128
+				
+				for (let b of bits) {
+					
+					/* 
+						Which variable holds the decimal equivalent of the bits in the table?
+						Which variable holds the place value of each bit to multiply by?
+					*/
+
+					/* Explaination:
+						The "decNum" variable holds the decimal equivalent of the bits in the table, so we have to
+						add each binary place value to it each time we iterate through a bit.
+
+						The "placeVal" variable holds the binary place value in each bit, but we have to multiply
+						it by "b.value" since "b.value" represents whether there is a value on this bit or not (0 or 1).
+						If its a 0 we basically add nothing, but if it is 1, we add the placeVal.
+					*/
+					decNum += b.value * placeVal;
+					
+					// Which variable needs halving for each "bit"?
+
+					/* Explaination:
+						The placeVal variable needs to be halved each time we go through a bit, because the binary
+						place value halves as we go through each bit from left to right. For example, the first bit
+						is 2^7, which is 128, but the next bit is 2^6, which is 64. This shows we have to half the 
+						placeVal variable each time we go through a bit.
+					*/
+
+					placeVal = Math.abs(placeVal) / 2
+				}
+				
+				/* 
+					What is the id of the input box which shows the decimal equivalent of the bits in the table?
+					Which variable needs to be displayed there?
+				*/
+
+				/* Explaination:
+					The id of the input box is called inpDecNum (as in line 66), and we have to put the decimal result,
+					which is called "decNum" in the value of the input box (.value = decNum).
+				*/
+
+				document.getElementById("inpDecNum").value = decNum;
+				
+			}
+			
+			function convBin() {
+				
+				// What is the id of the input box which holds the decimal number to convert to binary?
+				// Explaination: The id of the input box is called "inpDecNum" (line 66)
+
+				let decNum = document.getElementById("inpDecNum").valueAsNumber;
+				
+				// What is the lowest decimal number that can be represented by 8 bits in this converter?
+
+				/* Explaination:
+					The lowest decimal number that can be represented by this converter is when all the bits
+					are "off" (or 0), which in that case the equivalent decimal number is 0, so the lowest
+					convertable decimal number is 0.
+				*/
+
+				if (decNum < -128) {
+					alert("This converter does not deal with numbers < -128 !"); // Or "... with negative numbers!"
+
+					/* Explaination
+						Since this converter cannot deal with decimal numbers below 0, it also means that this converter
+						cannot deal with negative numbers.
+					*/
+
+					convDec(); // Call the convDec() function to reconvert what the bits show.
+				}
+				
+				// What is the highest decimal number that can be represented by 8 bits in this converter?
+
+				/* Explaination:
+					Highest decimal number that can be represented is 255, as when all the bits are on (or 1). If
+					all the bits are on, we have to add all the binary place values from left to right, which is 
+					128 + 64 + 32 + 16 + 8 + 4 + 2 + 1 and the answer is 255. Therefore, the maximum value that can
+					be represented by 8 bits is 255, and if we go further, it will be an overflow and will cause errors.
+				*/
+
+				else if (decNum > 127) {
+					alert("This converter does not deal with numbers > 127 !");
+					convDec(); // Convert the binary number currently showing to decimal.
+				}
+				
+				else {
+					// What is the id of the table with all the "binary bit" buttons?
+					// Explaination: The id of the table with all the binary bits is called "tblBits" (line 23)
+
+					let bits = document.getElementById("tblBits").getElementsByTagName('input');
+					
+					/* 
+						The variable below will hold the place value of each bit.
+						What should it be initialised to (note that we go through all the bits from
+						left -> right).
+					*/
+
+					/* Explaination:
+						We are going from left to right again in the binary place value, so we have to start
+						with the binary place value of the leftmost bit, which is 128 (2^7).
+					*/
+
+					if (decNum < 0) {
+						decNum = 256 + decNum
+					}
+
+					let placeVal = 128;
+					
+					for (let b of bits){
+						
+						// What do we need to check before deciding to use a 0 or 1?
+
+						/* Explaination:
+							We have to check whether the decimal number entered is larger or equal
+							to the placeVal, since we only "add a bit" or "change the bit to 1" if the
+							decimal number is greater or equal to the current bit's binary place value.
+						*/
+
+						if (decNum >= placeVal){
+							
+							// Do we write a 1 or 0?
+							// Explaination: if the decNum is larger or equal to placeVal, we have to change it to 1 as said above.
+
+							b.value = 1;
+							
+							// What do we subtract from the decimal number?
+							/* Explaination:
+								We have to subtract the placeVal from the decNum since we already added an bit in the binary value,
+								and equivalently we have to subtract the current bit's place value from decNum to prevent counting
+								this binary bit again in the future.
+							*/
+
+							decNum -= placeVal;
+						}
+						else
+							// Do we write a 1 or 0?
+							/* Explaination:
+								If the decNum is less than placeVal, this means that the decimal value doesn't occupy this current
+								binary bit's value. Therefore, we don't only need to write a 0 since we dont need to count this bit
+								to represent the decimal value.
+							*/
+
+							b.value = 0;
+						
+						// What happens to the place value of each bit as we go from left -> right?
+						/* Explaination:
+							As said above (line 158), The placeVal variable needs to be halved each time we go through a bit,
+							because the binary place value halves as we go through each bit from left to right. For example the
+							leftmost bit is 128, and the next bit is 64, so we have to half the placeVal when we go through
+							each bit from left to right.
+						*/
+						
+						placeVal /= 2;
+					}
+				}
+			}
+		</script>
+	</body>
+</html>
+
+<!--
+Notes:
+1. When creating button ids use btn to start the id.
+
+2. Use this.id to send the id of the button clicked to a function.
+We do this so we can change the button clicked to 1 or 0.
+
+3. When dealing with anything other than number inputs, must use .value, not .valueAsNumber.
+document.getElementById('btn128').value * 128
+
+4. There actually 10 inputs:
+(the 8 bits (buttons) + decimal number input + another button to convert the decimal number).
+
+Therefore we need to have a way to differentiate between them.
+The easiest way is to give the table with the 8 bits an id e.g. tblBinary.
+Then use this id to get all the buttons in this id and put them in an array (list).
+
+e.g.
+let bits = document.getElementById("tblBinary").getElementsByTagName('input');
+
+We can refer to each button with a loop which goes through each button
+(the first one is the bit for 128 and the last one the bit for 1).
+
+e.g.
+for (let b of bits){
+	if (decNum >= placeVal)
+		b.value = 1;
+	else
+		b.value = 0;
+	placeVal /= 2;
+}
+
+
+If we didn't do this then we would have to use 8 different ids to refer to each of these 
+8 buttons individually.
+
+As the only other input we need to refer to is the decimal number input then we can just refer to by 
+giving it its own unique id.
+
+Suggested max % levels:
+100% = works as shown here and all 
+some attempt to convert in 1 direction
+84% = 1 way conversion only.
+94% = 2 way conversion but no & HTML JavaScript code restrictions
+-->
