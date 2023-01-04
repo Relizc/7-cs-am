@@ -17,7 +17,7 @@
     		</style>
 	</head>
 	<body>
-		<h1>05.02 Complement Binary <-> Decimal Converter Eric Wong</h1>
+		<h1>05.03 Fixed Point Binary <-> Decimal Converter Eric Wong</h1>
 		
 		<p>Binary Number:</p>
 		<table id = "tblBits">
@@ -26,7 +26,7 @@
 				<td>4</td>
 				<td>2</td>
 				<td>1</td>
-				<td rowspan="2">&bull;</td>
+				<td rowspan="2"><sup style ="font-size: xx-large;"><b>.</b></td>
 				<td>1/2</td>
 				<td>1/4</td>
 				<td>1/8</td>
@@ -40,21 +40,25 @@
 				-->
 
 				<!-- Explaination:
-					The decimal place value of the first bit from left to right is 128.
-					However, the first decimal plae value of the first bit from right to left is 1
+					The decimal place value of the first bit from left to right is -8. It is intended to represent 8,
+					but in a complement (signed) binary, the first bit is multiplied by -1 (which turns into -8), in
+					order to represent negative decimal numbers.
+
+					However, the first decimal plae value of the first bit from right to left is 0.0625, which is 1/16,
+					and it doubles as we go to the left.
 					
-					We have to paste it 7 more times because we need 8 bits to represent from 2^7 (128) to 2^0 (1)
+					We have to paste it 7 more times because we need 8 bits to represent from -8 to 7.9375
 				-->
 			</tr>
 			<tr>
-				<td><input type = "button" id = "btn-128" onclick = "convDec(this.id)" value = "0"></td>
-				<td><input type = "button" id = "btn64" onclick = "convDec(this.id)" value = "0"></td>
-				<td><input type = "button" id = "btn32" onclick = "convDec(this.id)" value = "0"></td>
-				<td><input type = "button" id = "btn16" onclick = "convDec(this.id)" value = "0"></td>
-				<td><input type = "button" id = "btn8" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "btn-8" onclick = "convDec(this.id)" value = "0"></td>
 				<td><input type = "button" id = "btn4" onclick = "convDec(this.id)" value = "0"></td>
 				<td><input type = "button" id = "btn2" onclick = "convDec(this.id)" value = "0"></td>
 				<td><input type = "button" id = "btn1" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "btn0.5" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "btn0.25" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "btn0.125" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "btn0.0625" onclick = "convDec(this.id)" value = "0"></td>
 				
 				<!-- Copy and paste the line above 7 times for each of the 8 bits and change the id (decimal place value). -->
 				
@@ -65,7 +69,7 @@
 		</table>
 		<h3>Number In Decimal:</h3>
 		<input type = "number" id = "inpDecNum" min = -8 max = 7.9375 value = "0">
-		<input type = "button" onclick = "convBin()" id = "btnToBin">
+		<input type = "button" onclick = "convBin()" id = "btnToBin" value = "Convert to Binary">
 		
 		<script>
 			function convDec(btn) {
@@ -78,18 +82,18 @@
 				*/
 
 				/* Explaination:
-					We can get the id of the button by using the "btn" parameter, since the
-					id is already included when this function is called in the onclick 
-					function of the buttons. (... convDec(this.id) ...)
+					We can get the button that is clicked by getting the button by its id, which is
+					passed into the "btn" parameter in the convDec function when it was called with
+					convDec(this.id) in the button's onclick function.
 				*/
 
 				let btnClicked = document.getElementById(btn);
 				
 				/* 
-				We only switch a bit if a button was clicked,
-				i.e. If an invalid decimal was entered then we need to return
-				the decimal number to whatever the button bits currently represent
-				but don't switch any bits. 
+					We only switch a bit if a button was clicked,
+					i.e. If an invalid decimal was entered then we need to return
+					the decimal number to whatever the button bits currently represent
+					but don't switch any bits. 
 				*/
 
 				if (btnClicked != null)
@@ -111,17 +115,25 @@
 				
 				
 				// What is the id of the table with all the "binary bit" buttons?
-				// Explaination: The id of the table with all the "binary bit" buttons is "tblBits" (line 23)
+				/*
+					The id of the table with all the "binary bit" buttons is "tblBits" (line 23). However,
+					there are in total of 9 inputs in the whole HTML document, so in order to distunguish
+					between the bits buttons and the "Submit" button, we have to get all the inputs
+					in the "tblBits" element, which only contains the bits buttons.
+				*/
+
 				let bits = document.getElementById("tblBits").getElementsByTagName('input');
 				
 				/* 
 					The variable below will hold the decimal equivalent of the bits in the table.
 					What should it be initialised to?
 				*/
-				
+
 				/* Explaination:
-					The variable should be initlized to -128, because we have to start with -128
+					The variable should be initlized to 0, because we have to start with -8
 					for the conversion as there are no numbers being converted since the start.
+					Also it is the variable that holds the decimal number value, so it should 
+					be initlized to 0.
 				*/
 				let decNum = 0;
 				
@@ -132,11 +144,15 @@
 				*/
 
 				/* Explaination:
-					The first decimal place value of the first bit is 128, since we are going from
-					left to right, and the leftmost bit is 2^7, which is 128.
+					The first decimal place value of the first bit is -8, since we are going from
+					left to right. When we are going from left to right, the first bit is 2^4, which
+					is 8, and this converter is also used for complement (signed) binary, we have to
+					make it a -8, since we also need to represent negative decimal numbers.
 				*/
 
-				let placeVal = -128
+				// STOPPED HERE LAST TIME: CRITERIA 13
+
+				let placeVal = -8
 				
 				for (let b of bits) {
 					
@@ -164,7 +180,10 @@
 						placeVal variable each time we go through a bit.
 					*/
 
-					placeVal = Math.abs(placeVal) / 2
+					if (placeVal < 0) 
+						placeVal /= -2
+					else
+						placeVal /= 2
 				}
 				
 				/* 
@@ -196,7 +215,7 @@
 					convertable decimal number is 0.
 				*/
 
-				if (decNum < -128) {
+				if (decNum < -8) {
 					alert("This converter does not deal with numbers < -128 !"); // Or "... with negative numbers!"
 
 					/* Explaination
@@ -216,8 +235,8 @@
 					be represented by 8 bits is 255, and if we go further, it will be an overflow and will cause errors.
 				*/
 
-				else if (decNum > 127) {
-					alert("This converter does not deal with numbers > 127 !");
+				else if (decNum > 7.9375) {
+					alert("This converter does not deal with numbers > 7.9735 !");
 					convDec(); // Convert the binary number currently showing to decimal.
 				}
 				
@@ -238,13 +257,20 @@
 						with the binary place value of the leftmost bit, which is 128 (2^7).
 					*/
 
+					let negative = false;
+
 					if (decNum < 0) {
-						decNum = 256 + decNum
+						negative = true;
+						decNum -= -8
+						bits[0].value = 1;
+					} else {
+						bits[0].value = 0;
 					}
 
-					let placeVal = 128;
+					let placeVal = 4;
+					let numerator = 0;
 					
-					for (let b of bits){
+					for (let i = 1; i < bits.length; i ++) {
 						
 						// What do we need to check before deciding to use a 0 or 1?
 
@@ -259,7 +285,11 @@
 							// Do we write a 1 or 0?
 							// Explaination: if the decNum is larger or equal to placeVal, we have to change it to 1 as said above.
 
-							b.value = 1;
+							if (placeVal < 1) {
+								numerator += 16 / (1 / placeVal)
+							}
+
+							bits[i].value = 1;
 							
 							// What do we subtract from the decimal number?
 							/* Explaination:
@@ -272,13 +302,14 @@
 						}
 						else
 							// Do we write a 1 or 0?
+
 							/* Explaination:
 								If the decNum is less than placeVal, this means that the decimal value doesn't occupy this current
 								binary bit's value. Therefore, we don't only need to write a 0 since we dont need to count this bit
 								to represent the decimal value.
 							*/
 
-							b.value = 0;
+							bits[i].value = 0;
 						
 						// What happens to the place value of each bit as we go from left -> right?
 						/* Explaination:
@@ -289,6 +320,25 @@
 						*/
 						
 						placeVal /= 2;
+					}
+
+					if (decNum != 0) {
+						alert("This converter is not precise enough to repesent the decimal number you had entered in binary form!")
+						
+						if (decNum > 0.0375) {
+							for (let i = bits.length - 1; i >= 0; i --) {
+								if (bits[i].value == 1) {
+									bits[i].value = 0;
+									continue;
+								} else {
+									bits[i].value = 1;
+									break;
+								}
+								
+							}
+						}
+
+						convDec()
 					}
 				}
 			}
