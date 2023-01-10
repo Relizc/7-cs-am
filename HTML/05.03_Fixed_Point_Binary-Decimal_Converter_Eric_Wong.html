@@ -175,9 +175,13 @@
 
 					/* Explaination:
 						The placeVal variable needs to be halved each time we go through a bit, because the binary
-						place value halves as we go through each bit from left to right. For example, the first bit
-						is 2^7, which is 128, but the next bit is 2^6, which is 64. This shows we have to half the 
+						place value halves as we go through each bit from left to right. For example, the second bit
+						is 2^3, which is 4, but the next bit is 2^2, which is 4. This shows we have to half the 
 						placeVal variable each time we go through a bit.
+
+						Additionally, in a complement (signed) binary, the first bit is -8, but the second is 4, so
+						in order to change -8 to 4, we have to divide the placeVal by -2 to change it to a positive number,
+						only if placeVal was the first bit (or a negative number).s 
 					*/
 
 					if (placeVal < 0) 
@@ -203,7 +207,7 @@
 			function convBin() {
 				
 				// What is the id of the input box which holds the decimal number to convert to binary?
-				// Explaination: The id of the input box is called "inpDecNum" (line 66)
+				// Explaination: The input box that holds the decimal number that we are converting is called inpDecNum (line 71).
 
 				let decNum = document.getElementById("inpDecNum").valueAsNumber;
 				
@@ -211,28 +215,22 @@
 
 				/* Explaination:
 					The lowest decimal number that can be represented by this converter is when all the bits
-					are "off" (or 0), which in that case the equivalent decimal number is 0, so the lowest
-					convertable decimal number is 0.
+					are "off" except for the first -8  bit, which in that case the equivalent decimal number 
+					is -8. It is impossible for the converter to produce any lower decimal number.
 				*/
 
 				if (decNum < -8) {
-					alert("This converter does not deal with numbers < -128 !"); // Or "... with negative numbers!"
-
-					/* Explaination
-						Since this converter cannot deal with decimal numbers below 0, it also means that this converter
-						cannot deal with negative numbers.
-					*/
-
+					alert("This converter does not deal with numbers < -8 !");
 					convDec(); // Call the convDec() function to reconvert what the bits show.
 				}
 				
 				// What is the highest decimal number that can be represented by 8 bits in this converter?
 
 				/* Explaination:
-					Highest decimal number that can be represented is 255, as when all the bits are on (or 1). If
-					all the bits are on, we have to add all the binary place values from left to right, which is 
-					128 + 64 + 32 + 16 + 8 + 4 + 2 + 1 and the answer is 255. Therefore, the maximum value that can
-					be represented by 8 bits is 255, and if we go further, it will be an overflow and will cause errors.
+					Highest decimal number that can be represented is 7.9375, as when all the bits are on (or 1) except 
+					for the first -8 bit. When all the positive bits are on, the decimal value of the place value is
+					4 + 2 + 1 + 0.5 + 0.25 + 0.125 + 0.0625, which is 7.9375. It is impossible for this converter to
+					produce a higher decimal value than 7.9375
 				*/
 
 				else if (decNum > 7.9375) {
@@ -253,24 +251,38 @@
 					*/
 
 					/* Explaination:
-						We are going from left to right again in the binary place value, so we have to start
-						with the binary place value of the leftmost bit, which is 128 (2^7).
+						We are going from left to right again in the binary place value, and we are also "ignoring"
+						the first bit since it is a negative number, which means we are starting from the second bit
+						from left to right. Therefore, placeVal should be initlized to 4 since its starting from the
+						place value of the second bit from left to right.
 					*/
-
-					let negative = false;
+					
+					let placeVal = 4;
 
 					if (decNum < 0) {
-						negative = true;
+
+						/* Explaination:
+							If the decNum is a negative number, the first bit of the binary value is always "on".
+							Therefore, we can ignore the first bit, and basically convert the remaining bits.
+
+							For example, if we entered -1, we can just simply put "on" the first bit, and we subtract
+							-8 from the decNum, which is basically adding 8 to it. After that, the decNum becomes 7
+							and we can just simply convert the bits after the -8 bit.
+						*/
+
 						decNum -= -8
 						bits[0].value = 1;
 					} else {
 						bits[0].value = 0;
 					}
-
-					let placeVal = 4;
-					let numerator = 0;
 					
 					for (let i = 1; i < bits.length; i ++) {
+
+						/* Explaination:
+							We have to do a normal for loop this time, since we are ignoring the first bit (or button) from
+							the bits array. Therefore, we have to start from 1, so this for loop would not operate with the
+							first bit that was already operated in the if else statements above.
+						*/
 						
 						// What do we need to check before deciding to use a 0 or 1?
 
@@ -285,11 +297,12 @@
 							// Do we write a 1 or 0?
 							// Explaination: if the decNum is larger or equal to placeVal, we have to change it to 1 as said above.
 
-							if (placeVal < 1) {
-								numerator += 16 / (1 / placeVal)
-							}
-
 							bits[i].value = 1;
+							/* Explaination: 
+								Before the variable b represents a item in the "bits" array, but now we are using a normal for
+								loop, so we have to get the bit button by getting it directly from the bits array by the 
+								index number i.
+							*/
 							
 							// What do we subtract from the decimal number?
 							/* Explaination:
@@ -310,12 +323,17 @@
 							*/
 
 							bits[i].value = 0;
+							/* Explaination: 
+								Again, the variable b represents a item in the "bits" array, but now we are using a normal for
+								loop, so we have to get the bit button by getting it directly from the bits array by the 
+								index number i.
+							*/
 						
 						// What happens to the place value of each bit as we go from left -> right?
 						/* Explaination:
-							As said above (line 158), The placeVal variable needs to be halved each time we go through a bit,
-							because the binary place value halves as we go through each bit from left to right. For example the
-							leftmost bit is 128, and the next bit is 64, so we have to half the placeVal when we go through
+							The placeVal variable needs to be halved each time we go through a bit, because the binary 
+							place value halves as we go through each bit from left to right. For example the
+							second bit is 4, and the next bit is 2, so we have to half the placeVal when we go through
 							each bit from left to right.
 						*/
 						
@@ -323,10 +341,30 @@
 					}
 
 					if (decNum != 0) {
+						/* Explaination:
+							This is the part that determines the precision of the decimal number. This will trigger when the
+							converter is not precise enough to convert the decimal number, which means that the decNum will not
+							be fully subtracted by the placeVals. Therefore, we need to round if the decNum is not 0.
+						*/
+
 						alert("This converter is not precise enough to repesent the decimal number you had entered in binary form!")
 						
 						if (decNum > 0.0375) {
+							/* Explaination:
+								0.0375 is 0.5 / 16, which is the half line between 2 precise decimal numbers. If the remaining decNum
+								(that is not 0) is greater than 0.0375, we round up the decimal number, but if it is lower than 0.0375,
+								we do not need to round it up, we just need to round down.
+							*/
+
+
 							for (let i = bits.length - 1; i >= 0; i --) {
+								/* Explaination:
+									This is the rounding up functions. To round up, we basically add "1" to the rightmost bit,
+									and as it operates the same as binary calculations.
+
+									For exampe 0101 adds 1 to the rightmost bit becomes 0102, and because binary could not display
+									2, the two adds a place to the left bit of the 2, which 0102 becomes 0110.
+								*/
 								if (bits[i].value == 1) {
 									bits[i].value = 0;
 									continue;
@@ -338,7 +376,7 @@
 							}
 						}
 
-						convDec()
+						convDec() // Do convDec() again to redisplay the rounded decimal number.
 					}
 				}
 			}

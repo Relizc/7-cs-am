@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			table,
+			th,
+			td {
+				padding: 5px;
+				border: 1px solid #000000;
+				border-collapse: collapse;
+      			}
+    		</style>
+	</head>
+	<body>
+		<h1>05.04 Floating Point Binary -> Decimal Converter Eric Wong</h1>
+		<p>Binary Number:</p>
+		
+		<!-- <table style = "text-align:center; table-layout: fixed; width: 55%;"> -->
+		
+		<table style = "text-align:center; width: 55%;">
+  			<tr>
+				<!-- What are the names of the each group of 8 bits? -->
+
+				<!--
+					The two parts of the floating point system is the Mantissa, which represents
+					the decimal number in the scientific notation, and the Exponent, which represents
+					the ×10's exponent in the scientific notation (in the floating point system the
+					exponent represents the ×2's exponent in the scientific notation).
+				-->
+				
+				<td colspan="9"><b>Mantissa</b></td>
+				<td colspan="8"><b>Exponent</b></td>
+			</tr>
+			<tr>
+    			
+				<!-- What are decimal place values of each bit? -->
+
+				<!--
+					The first bit is -1, which represents the positive / negative mark of the floating system,
+					and after that is the Mantissa, which starts from 1/2 halves as it goes through the 7 bits.
+
+					After the mantissa is the exponent part, which is a regular complement (signed) 8-bit binary
+					that represents the ×2's exponent.
+				-->
+				
+				<td>-1</td>
+    			<td rowspan="2"><sup style="font-size:xx-large;"><b>.</b></td>
+    			<td>1/2</td>
+				<td>1/4</td>
+				<td>1/8</td>
+				<td>1/16</td>
+				<td>1/32</td>
+				<td>1/64</td>
+				<td>1/128</td>
+				<td>-128</td>
+    			<td>64</td>
+				<td>32</td>
+				<td>16</td>
+				<td>8</td>
+				<td>4</td>
+				<td>2</td>
+				<td>1</td>
+			</tr>
+			<tr>
+				<td><input type = "button" id = "bNeg1" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "bF2" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "bF4" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "bF8" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "bF16" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "bF32" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "bF64" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "bF128" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "bNeg128" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "b64" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "b32" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "b16" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "b8" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "b4" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "b2" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "b1" onclick = "convDec(this.id)" value = "0"></td>
+			</tr>
+		</table>
+		<p>
+			To stop multiple floating point representations of the same number only normalised floating point
+			binary representations<br>are actually considered valid <i>(the 1st 2 bits in the mantissa must be 
+			different)</i>.<br>e.g. Try representing -1.5 <i>(there are at least 2 different ways but only 1 way 
+			is normalised)</i>.
+		</p>
+		<p id = "tagNorm">Not Normalised!<p>
+		<h3>Number In Decimal:</h3>
+		<table style = "text-align:center; width: 20%; border: 0px">
+			<tr>
+				<td colspan="2" style = "border: 0px"><b>Mantissa</b></td>
+				<td style = "border: 0px"></td>
+				<td style = "border: 0px"></td>
+				<td style = "border: 0px"><b>Exponent</b></td>
+			</tr>
+			<tr>
+				<td style = "border: 0px">Fraction</td>
+				<td style = "border: 0px">Decimal</td>
+				<td style = "border: 0px"></td>
+				<td style = "border: 0px"></td>
+				<td rowspan="2" style = "border: 0px" id="tagExp"></td>
+			</tr>
+			<tr>
+				<td style = "border: 0px" id="tagManFrac"></td>
+				<td style = "border: 0px" id="tagManDec"></td>
+				<td style = "border: 0px">*</td>
+				<td style = "border: 0px">2</td>
+			</tr>
+		</table>
+		<h2 id="tagNumDec">0</h2>
+		
+		<p>
+			As well as "playing" try to find the following 
+			<i>(the relevant target below will be bold if you manage to do so).</i><br>
+			<ol>
+				<li>Highest positive number that can be represented.</li>
+				<li>Lowest positive number that can be represented.</li>
+				<li>Highest negative number that can be represented.</li>
+				<li>Lowest negative number that can be represented.</li>
+			</ol>
+		</p>
+		
+		<script>
+			function convDec(btn) {
+				
+				let btnClicked = document.getElementById(btn);
+				
+				if (btnClicked.value == 1)
+					btnClicked.value = 0;
+				else
+					btnClicked.value = 1;
+				
+				let bits = document.getElementsByTagName('input');
+				
+				/* 
+					What needs passed to the mantissa() function?
+					Now move to the mantissa() function, uncomment it and replace the ? marks.
+					Test your code so far before coming back here to continue.
+				*/
+
+				/* Explaination: 
+					In order to convert the binary mantissa to the decimal mantissa, we need to pass
+					the variable "bits" which contains the bits buttons that the mantissa function
+					needs to iterate through and convert to decimal mantissa.
+				*/
+				
+				let man = mantissa(bits);
+				
+				document.getElementById("tagManDec").innerHTML = man;
+				
+				/* 
+					What needs passed to the exponent() function?
+					Uncomment the line below and move to the exponent() function, uncomment it and replace the ? marks.
+					Test your code so far before coming back here to continue.
+				*/
+
+				/* Explaination: 
+					Same as the mantissa function, in order to convert the binary exponent to the 
+					decimal exponent, we need to pass the variable "bits" which contains the bits 
+					buttons that the exponent function needs to iterate through and convert to decimal mantissa.
+				*/
+
+				let exp = exponent(bits);
+				
+				document.getElementById("tagExp").innerHTML = exp;
+				
+				let eManFrac = document.getElementById("tagManFrac");
+				if (man < 0)
+					eManFrac.innerHTML = "-" + numberToFraction(-man);
+				else
+					eManFrac.innerHTML = numberToFraction(man);
+				
+				/*
+					 ? * ? to the power ? (compare to standard form (decimal) e.g. 5.6 * 10^2)
+					Uncomment the line below, replace the ? marks and test your code so far before continuing.
+				*/ 
+				
+				// let numDec = ? * Math.pow (?, ?);
+				
+				document.getElementById("tagNumDec").innerHTML = "= " + numDec;
+				
+				/* 
+					What needs passed to the normalised() function?
+					Uncomment the line below and move to the normalised() function, uncomment it and replace the ? marks.
+					Test your code so far before coming back here to continue.
+				*/
+				
+				// normalised(?);
+				
+				/* 
+					Which variable needs passed to the limits() function?
+					Uncomment the line below and move to the limits() function, uncomment it and replace the ? marks.
+					Test everything and then you should be finished if everything is good!
+				*/
+				
+				// limits(?);
+				
+			}
+			
+			
+			function mantissa(bits) {
+				
+				let man = 0;
+				
+				// What is the decimal place value of the first left bit of the mantissa?
+				// Explaination: The first left bit of the mantissa is -1.
+				
+				let placeVal = -1;
+				
+				// How many bits in the mantissa?
+
+				/* Explaination:
+					There are 16 bits in the floating point decimal system, which 8 of the bits
+					belongs to the mantissa part.
+				*/
+				
+				for (let i = 0 ; i < 8 ; i ++){
+					
+					// What should each bit value be multiplied by to convert it to decimal?
+
+					/* Explaination:
+						The bit should be multiplied by the "placeVal" variable, because it holds the
+						current place value of the binary mantissa. 
+						
+						Also, the button's status (bits[i].value) is off, we should add nothing 
+						because it is multiplied by 0, and if the status is on, we should just 
+						simply add the place value because it is multiplied by 1.
+					*/
+					
+					man += bits[i].value * placeVal;
+					
+					/* 
+						Which value of placeVal needs to be changed to a positive number
+						before moving onto the next bit?
+					*/
+
+					/* Explaination:
+						Since the placeVal variable holds the current binary mantissa place value,
+						and only the first bit is -1, we should multiply it by -1 when the place 
+						value is -1 in order to change the negative place value to positive.
+					*/
+
+					if (placeVal == -1)
+						placeVal *= -1;
+					
+					// What should placeVal be divided by before moving to the next bit?
+
+					/* Explaination:
+						Since the placeVal variable holds the current binary mantissa place value,
+						it should be halfed (divided by 2) every time we move to the next bit.
+
+						For example, the first bit is -1, and after multiplying it by -1 it becomes
+						1, which later on needs to be halved on the line below and turns into 0.5.
+					*/
+					
+					placeVal /= 2;
+				}
+				
+				// Which variable needs to be returned by this mantissa() function?
+				return man;
+				
+			}
+			
+			function exponent(bits) {
+				
+				let exp = 0;
+				
+				// What is the decimal place value of the first left bit of the exponent?
+
+				/* Explaination:
+					The exponent's bits start from the 9th bit in the 16 bits, and the 9th bit
+					is -128.
+				*/
+				
+				placeVal = -128;
+				
+				// Which element number in the bits array do we start on when calculating the exponent?
+
+				/* Explaination:
+					As said above, the exponent's bits start from the 9th bit in all of the 16 bits. However,
+					we have to start from the 8th bit in the whole bits array because the array's index in
+					javascript starts from 0 instead of 1. Therefore, the 9th bit is the 8th index in the bits array.
+				*/
+
+				for (let i = 8 ; i < 16 ; i++){
+					
+					// How do we access each bit in the bits array in this standard for loop?
+
+					/* Explaination:
+						The bits is the array that contains the bit buttons, so we have to use the "index" (which
+						is <array name>[index number]) representation to get the i-th bit button in the bits array.
+					*/
+
+					exp += bits[i].value * placeVal;
+					
+					// What does placeVal need to be multiplied by to change into a positive number?
+
+					/* Explaination:
+						Same as the mantissa function, the first bit in every part (in the exponent case it's the 9th bit)
+						should be multiplied by -1 in order to make it a positive number.
+
+						In this case, the first bit of the exponent part is -128, so when placeVal is -128, we have to
+						multiply it by -1 to make it 128
+					*/
+					
+					if (placeVal == -128)
+						placeVal *= -1;
+					
+					// What needs to be halved before moving to the next bit?
+
+					/* Explaination:
+						Also same in the mantissa function, the placeVal should be halfed every time as we move
+						to the next bit.
+
+						e.g. 64 halves and turns into 32.
+					*/
+					
+					placeVal /= 2;
+				}
+				
+				/*
+					Which keyword should be used to "pass" back the result of this exponent() function?
+					
+					See the following link for help if necessary:
+					https://www.w3schools.com/js/js_functions.asp
+
+				*/
+
+				// START HERE
+
+				/* Explaination:
+					The "return" statement returns the exp variable
+				*/
+				
+				return exp;
+				
+			}
+			
+			/*
+			function normalised(bits){
+				
+				let eNorm = document.getElementById("tagNorm");
+				if ( bits[0].value == bits[1].value )
+					
+					// Is the floating point binary number normalised?
+					
+					eNorm.innerHTML = "?"
+				else
+					// Is the floating point binary number normalised?
+					
+					eNorm.innerHTML = "?"
+				
+			}
+			*/
+			
+			/*
+			function limits(numDec){
+				
+				let liArr = document.getElementsByTagName('li');
+				
+				for (let t of liArr)
+					t.style.fontWeight = "normal";
+				
+				// What are the decimal limits of each option (in the order listed on the page)?
+				
+				if (numDec == ?)
+					liArr[0].style.fontWeight = "bold";
+				else if (numDec == ?)
+					liArr[1].style.fontWeight = "bold";
+				else if (numDec == ?)
+					liArr[2].style.fontWeight = "bold";
+				else if (numDec == ?)
+					liArr[3].style.fontWeight = "bold";
+				
+			}
+			*/
+			
+			function numberToFraction(amount) {
+	
+				// This is a whole number and doesn't need modification.
+				if ( parseFloat( amount ) === parseInt( amount ) ) {
+					return amount;
+				}
+				// Next 12 lines are cribbed from https://stackoverflow.com/a/23575406.
+				var gcd = function(a, b) {
+					if (b < 0.0000001) {
+						return a;
+					}
+					return gcd(b, Math.floor(a % b));
+				};
+				var len = amount.toString().length - 2;
+				var denominator = Math.pow(10, len);
+				var numerator = amount * denominator;
+				var divisor = gcd(numerator, denominator);
+				numerator /= divisor;
+				denominator /= divisor;
+				var base = 0;
+				// In a scenario like 3/2, convert to 1 1/2
+				// by pulling out the base number and reducing the numerator.
+				if ( numerator > denominator ) {
+					base = Math.floor( numerator / denominator );
+					numerator -= base * denominator;
+				}
+				amount = Math.floor(numerator) + '/' + Math.floor(denominator);
+				if ( base ) {
+					amount = base + ' ' + amount;
+				}
+				return amount;
+			};
+		</script>
+		
+	</body>
+</html>
+

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			table,
+			th,
+			td {
+				padding: 5px;
+				border: 1px solid #000000;
+				border-collapse: collapse;
+      			}
+    		</style>
+	</head>
+	<body>
+		<h1>05.04 Floating Point Binary -> Decimal Converter</h1>
+		<p>Binary Number:</p>
+		
+		<!-- <table style = "text-align:center; table-layout: fixed; width: 55%;"> -->
+		
+		<table style = "text-align:center; width: 55%;">
+  			<tr>
+				<!-- What are the names of the each group of 8 bits? -->
+				
+				<td colspan="9"><b>?</b></td>
+				<td colspan="8"><b>?</b></td>
+			</tr>
+			<tr>
+    				<!-- What are decimal place values of each bit? -->
+				
+				<td>?</td>
+    				<td rowspan="2"><sup style="font-size:xx-large;"><b>.</b></td>
+    				<td>?</td>
+				<td>?</td>
+				<td>?</td>
+				<td>?</td>
+				<td>?</td>
+				<td>?</td>
+				<td>?</td>
+				<td>?</td>
+    				<td>?</td>
+				<td>?</td>
+				<td>?</td>
+				<td>?</td>
+				<td>?</td>
+				<td>?</td>
+				<td>?</td>
+			</tr>
+			<tr>
+				<td><input type = "button" id = "bNeg1" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "bF2" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "bF4" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "bF8" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "bF16" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "bF32" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "bF64" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "bF128" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "bNeg128" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "b64" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "b32" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "b16" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "b8" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "b4" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "b2" onclick = "convDec(this.id)" value = "0"></td>
+				<td><input type = "button" id = "b1" onclick = "convDec(this.id)" value = "0"></td>
+			</tr>
+		</table>
+		<p>
+			To stop multiple floating point representations of the same number only normalised floating point
+			binary representations<br>are actually considered valid <i>(the 1st 2 bits in the mantissa must be 
+			different)</i>.<br>e.g. Try representing -1.5 <i>(there are at least 2 different ways but only 1 way 
+			is normalised)</i>.
+		</p>
+		<p id = "tagNorm">Not Normalised!<p>
+		<h3>Number In Decimal:</h3>
+		<table style = "text-align:center; width: 20%; border: 0px">
+			<tr>
+				<td colspan="2" style = "border: 0px"><b>Mantissa</b></td>
+				<td style = "border: 0px"></td>
+				<td style = "border: 0px"></td>
+				<td style = "border: 0px"><b>Exponent</b></td>
+			</tr>
+			<tr>
+				<td style = "border: 0px">Fraction</td>
+				<td style = "border: 0px">Decimal</td>
+				<td style = "border: 0px"></td>
+				<td style = "border: 0px"></td>
+				<td rowspan="2" style = "border: 0px" id="tagExp"></td>
+			</tr>
+			<tr>
+				<td style = "border: 0px" id="tagManFrac"></td>
+				<td style = "border: 0px" id="tagManDec"></td>
+				<td style = "border: 0px">*</td>
+				<td style = "border: 0px">2</td>
+			</tr>
+		</table>
+		<h2 id="tagNumDec">0</h2>
+		
+		<p>
+			As well as "playing" try to find the following 
+			<i>(the relevant target below will be bold if you manage to do so).</i><br>
+			<ol>
+				<li>Highest positive number that can be represented.</li>
+				<li>Lowest positive number that can be represented.</li>
+				<li>Highest negative number that can be represented.</li>
+				<li>Lowest negative number that can be represented.</li>
+			</ol>
+		</p>
+		
+		<script>
+			function convDec(btn) {
+				
+				let btnClicked = document.getElementById(btn);
+				
+				if (btnClicked.value == 1)
+					btnClicked.value = 0;
+				else
+					btnClicked.value = 1;
+				
+				let bits = document.getElementsByTagName('input');
+				
+				/* 
+					What needs passed to the mantissa() function?
+					Now move to the mantissa() function, uncomment it and replace the ? marks.
+					Test your code so far before coming back here to continue.
+				*/
+				
+				let man = mantissa(?);
+				
+				document.getElementById("tagManDec").innerHTML = man;
+				
+				/* 
+					What needs passed to the exponent() function?
+					Uncomment the line below and move to the exponent() function, uncomment it and replace the ? marks.
+					Test your code so far before coming back here to continue.
+				*/
+
+				// let exp = exponent(?);
+				
+				document.getElementById("tagExp").innerHTML = exp;
+				
+				let eManFrac = document.getElementById("tagManFrac");
+				if (man < 0)
+					eManFrac.innerHTML = "-" + numberToFraction(-man);
+				else
+					eManFrac.innerHTML = numberToFraction(man);
+				
+				/*
+					 ? * ? to the power ? (compare to standard form (decimal) e.g. 5.6 * 10^2)
+					Uncomment the line below, replace the ? marks and test your code so far before continuing.
+				*/ 
+				
+				// let numDec = ? * Math.pow (?, ?);
+				
+				document.getElementById("tagNumDec").innerHTML = "= " + numDec;
+				
+				/* 
+					What needs passed to the normalised() function?
+					Uncomment the line below and move to the normalised() function, uncomment it and replace the ? marks.
+					Test your code so far before coming back here to continue.
+				*/
+				
+				// normalised(?);
+				
+				/* 
+					Which variable needs passed to the limits() function?
+					Uncomment the line below and move to the limits() function, uncomment it and replace the ? marks.
+					Test everything and then you should be finished if everything is good!
+				*/
+				
+				// limits(?);
+				
+			}
+			
+			/*
+			function mantissa(bits){
+				
+				let man = 0;
+				
+				// What is the decimal place value of the first left bit of the mantissa?
+				
+				let placeVal = ?;
+				
+				// How many bits in the mantissa?
+				
+				for (let i = 0 ; i < ? ; i++){
+					
+					// What should each bit value be multiplied by to convert it to decimal?
+					
+					man += bits[i].value * ?;
+					
+					/* 
+						Which value of placeVal needs to be changed to a positive number
+						before moving onto the next bit?
+					*/
+					if (placeVal == ?)
+						placeVal *= -1;
+					
+					// What should placeVal be divided by before moving to the next bit?
+					
+					placeVal /= ?;
+				}
+				
+				// Which variable needs to be returned by this mantissa() function?
+				return ?;
+				
+			}
+			*/
+			
+			/*
+			function exponent(bits){
+				
+				let exp = 0;
+				
+				// What is the decimal place value of the first left bit of the mantissa?
+				
+				placeVal = ?;
+				
+				// Which element number in the bits array do we start on when calculating the exponent?
+				for (let i = ? ; i < 16 ; i++){
+					
+					// How do we access each bit in the bits array in this standard for loop?
+					exp += ?.value * placeVal;
+					
+					// What does placeVal need to be multiplied by to change into a positive number?
+					
+					if (placeVal == -128)
+						placeVal *= ?;
+					
+					// What needs to be halved before moving to the next bit?
+					
+					? /= 2;
+				}
+				
+				/*
+					Which keyword should be used to "pass" back the result of this exponent() function?
+					
+					See the following link for help if necessary:
+					https://www.w3schools.com/js/js_functions.asp
+				*/
+				? exp;
+				
+			}
+			*/
+			
+			/*
+			function normalised(bits){
+				
+				let eNorm = document.getElementById("tagNorm");
+				if ( bits[0].value == bits[1].value )
+					
+					// Is the floating point binary number normalised?
+					
+					eNorm.innerHTML = "?"
+				else
+					// Is the floating point binary number normalised?
+					
+					eNorm.innerHTML = "?"
+				
+			}
+			*/
+			
+			/*
+			function limits(numDec){
+				
+				let liArr = document.getElementsByTagName('li');
+				
+				for (let t of liArr)
+					t.style.fontWeight = "normal";
+				
+				// What are the decimal limits of each option (in the order listed on the page)?
+				
+				if (numDec == ?)
+					liArr[0].style.fontWeight = "bold";
+				else if (numDec == ?)
+					liArr[1].style.fontWeight = "bold";
+				else if (numDec == ?)
+					liArr[2].style.fontWeight = "bold";
+				else if (numDec == ?)
+					liArr[3].style.fontWeight = "bold";
+				
+			}
+			*/
+			
+			function numberToFraction(amount) {
+	
+				// This is a whole number and doesn't need modification.
+				if ( parseFloat( amount ) === parseInt( amount ) ) {
+					return amount;
+				}
+				// Next 12 lines are cribbed from https://stackoverflow.com/a/23575406.
+				var gcd = function(a, b) {
+					if (b < 0.0000001) {
+						return a;
+					}
+					return gcd(b, Math.floor(a % b));
+				};
+				var len = amount.toString().length - 2;
+				var denominator = Math.pow(10, len);
+				var numerator = amount * denominator;
+				var divisor = gcd(numerator, denominator);
+				numerator /= divisor;
+				denominator /= divisor;
+				var base = 0;
+				// In a scenario like 3/2, convert to 1 1/2
+				// by pulling out the base number and reducing the numerator.
+				if ( numerator > denominator ) {
+					base = Math.floor( numerator / denominator );
+					numerator -= base * denominator;
+				}
+				amount = Math.floor(numerator) + '/' + Math.floor(denominator);
+				if ( base ) {
+					amount = base + ' ' + amount;
+				}
+				return amount;
+			};
+		</script>
+		
+	</body>
+</html>
+
