@@ -173,11 +173,19 @@
 					eManFrac.innerHTML = numberToFraction(man);
 				
 				/*
-					 ? * ? to the power ? (compare to standard form (decimal) e.g. 5.6 * 10^2)
+					 ? * ? to the power ? (compare to standard form (decimal man.g. 5.6 * 10^2)
 					Uncomment the line below, replace the ? marks and test your code so far before continuing.
 				*/ 
 				
-				// let numDec = ? * Math.pow (?, ?);
+				/* Explaination:
+					The decimal number should be mantissa × 2 ^ exponent, as that is how we calculate
+					the decimal value of a floating point binary. Also, we normally multiply the mantissa
+					by 10 because we are using the decimal system, which there are 10 possible digits, 
+					but we multiply the mantissa by 2 in this converter because we are using the binary 
+					system, which only has 2 possible digits (0 and 1).
+				*/
+
+				let numDec = man * Math.pow(2, exp);
 				
 				document.getElementById("tagNumDec").innerHTML = "= " + numDec;
 				
@@ -186,16 +194,27 @@
 					Uncomment the line below and move to the normalised() function, uncomment it and replace the ? marks.
 					Test your code so far before coming back here to continue.
 				*/
+
+				/* Explaination:
+					Same as the functions above, the "bits" variable holding an array of the bits buttons should be passed
+					into the normalised function in order to check if the floating binary is normalized.
+				*/
 				
-				// normalised(?);
+				normalised(bits);
 				
 				/* 
 					Which variable needs passed to the limits() function?
 					Uncomment the line below and move to the limits() function, uncomment it and replace the ? marks.
 					Test everything and then you should be finished if everything is good!
 				*/
+
+				/* Explaination:
+					To check whether the decimal number is the maximum positive number, minimum positive number, maximum negative
+					number, and minimum negative number, we need to pass the "numDec" variable that holds the converted decimal number
+					in the limits function to check whether the number meet any limits.
+				*/
 				
-				// limits(?);
+				limits(numDec);
 				
 			}
 			
@@ -328,34 +347,43 @@
 
 				*/
 
-				// START HERE
-
 				/* Explaination:
-					The "return" statement returns the exp variable
+					The "return" statement is responsible to return a value when the function is executed,
+					so we should put "return exp" in order to return the "exp" variable.
 				*/
 				
 				return exp;
 				
 			}
 			
-			/*
 			function normalised(bits){
 				
 				let eNorm = document.getElementById("tagNorm");
 				if ( bits[0].value == bits[1].value )
 					
 					// Is the floating point binary number normalised?
+
+					/* Explaination:
+						In the floating point system, the first bit and the second bit cannot be the same. In the
+						if statement, it is checking whether the first 2 bits are the same, and if it is the same,
+						the floating point binary number is not normalized.
+					*/
 					
-					eNorm.innerHTML = "?"
+					eNorm.innerHTML = "Not Normalised!"
 				else
+
 					// Is the floating point binary number normalised?
+
+					/* Explaination:
+						As said above, the first bit and the second bit cannot be the same in the floating point 
+						system. On the if statement above, it is checking whether the first and the second bit
+						are the same, and in this else statement, they are definitely not same since they
+						passed through the if statement. So if they are not same, they are normalized.
+					*/
 					
-					eNorm.innerHTML = "?"
-				
+					eNorm.innerHTML = "Normalised!"
 			}
-			*/
 			
-			/*
 			function limits(numDec){
 				
 				let liArr = document.getElementsByTagName('li');
@@ -364,18 +392,33 @@
 					t.style.fontWeight = "normal";
 				
 				// What are the decimal limits of each option (in the order listed on the page)?
+
+				//START HERE
+
+				/* Explaination:
+					There are 4 limits in the floating point system:
+
+					The largest positive number is 1.6881195546468432e+38:
+					This is the largest positive number because it's the highest number that
+					the converter can represent.
+
+					The lowest positive number is 1.4693679385278594e-39:
+					This is the lowest and the most precise positive decimal number that can
+					be represented by this converter.
+
+					The
+				*/
 				
-				if (numDec == ?)
+				if (numDec == 1.6881195546468432e+38)
 					liArr[0].style.fontWeight = "bold";
-				else if (numDec == ?)
+				else if (numDec == 1.4693679385278594e-39)
 					liArr[1].style.fontWeight = "bold";
-				else if (numDec == ?)
+				else if (numDec == -1.7014118346046923e+38)
 					liArr[2].style.fontWeight = "bold";
-				else if (numDec == ?)
+				else if (numDec == -1.4923268125673572e-39)
 					liArr[3].style.fontWeight = "bold";
 				
 			}
-			*/
 			
 			function numberToFraction(amount) {
 	
